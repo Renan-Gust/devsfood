@@ -71,8 +71,3 @@ class ProductController extends Controller
         print_r($args);
     }
 }
-
-// List categories - /categories
-// List products - /products
-// Get products by category - /products/category
-// Get products by page - /products/page
