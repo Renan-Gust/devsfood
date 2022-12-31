@@ -1,11 +1,14 @@
 <?php
 
-namespace src\handlers;
+namespace src\helpers;
 
 use \src\models\User;
 
-class UserHandler
+date_default_timezone_set('America/Sao_Paulo');
+
+class UserHelper
 {
+    // Check if you are logged
     public static function checkLogin()
     {
         if (!empty($_SESSION['token'])) {

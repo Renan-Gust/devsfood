@@ -1,7 +1,7 @@
 import { Categories } from "./types/categories";
 import { Products } from "./types/products";
 
-let BASE = "http://localhost/projetos/devsfood/api/public"
+let BASE = "http://localhost/projetos/devsfood/server/public"
 
 interface ApiType {
     getCategories: () => Promise<Categories>;

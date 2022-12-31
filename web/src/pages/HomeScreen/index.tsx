@@ -4,7 +4,6 @@ import ReactTooltip from "react-tooltip"
 import { CategoryItem } from "../../components/CategoryItem"
 import { Header } from "../../components/Header"
 import { Modal } from "../../components/Modal"
-import { ModalProduct } from "../../components/ModalProduct"
 import { ProductItem } from "../../components/ProductItem"
 
 import { api } from "../../api"
@@ -13,6 +12,7 @@ import { ProductsDataType } from "../../types/products"
 
 import { CategoryArea, CategoryList, Container, ProductArea, ProductList, ProductPaginationArea, ProductPaginationItem } from './styled'
 
+import { ModalLogin } from "../../components/ModalLogin"
 import foodAndRestaurant from '/assets/food-and-restaurant.png'
 
 let searchTimer: any = null
@@ -27,7 +27,7 @@ export const HomeScreen = () => {
     const [activePage, setActivePage] = useState<number>(1)
     const [activeSearch, setActiveSearch] = useState<string>('')
 
-    const [modalStatus, setModalStatus] = useState<boolean>(false)
+    const [modalStatus, setModalStatus] = useState<boolean>(true)
     const [modalData, setModalData] = useState<ProductsDataType>({})
 
     async function getProducts() {
@@ -119,7 +119,7 @@ export const HomeScreen = () => {
                     {Array(totalPages).fill(0).map((_, index) => (
                         <ProductPaginationItem 
                             key={index} 
-                            active={activePage} 
+                            active={activePage}
                             current={index + 1}
                             onClick={() => setActivePage(index + 1)}
                         >
@@ -130,7 +130,8 @@ export const HomeScreen = () => {
             }
 
             <Modal status={modalStatus} setStatus={setModalStatus}>
-                <ModalProduct data={modalData} setStatus={setModalStatus} />
+                {/* <ModalProduct data={modalData} setStatus={setModalStatus} /> */}
+                <ModalLogin />
             </Modal>
         </Container>
     )

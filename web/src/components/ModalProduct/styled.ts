@@ -7,8 +7,8 @@ export const Container = styled.div`
 `;
 
 export const ProductArea = styled.div`
-    height: 100px;
     display: flex;
+    gap: 16px;
 
     img{
         width: 310px;
@@ -21,19 +21,15 @@ export const ProductInfoArea = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-left: 10px;
 `;
 
 export const ProductDetails = styled.div`
     height: 50px;
+    color: ${props => props.theme.colors.LightGreen};
 
     p.name{
         font-size: 1.88rem;
         font-weight: bold;
-    }
-
-    p.ingredients{
-        font-size: 0.88rem;
     }
 `;
 
@@ -44,6 +40,7 @@ export const ProductQuantityArea = styled.div`
     p.price{
         font-size: 1.88rem;
         font-weight: bold;
+        color: ${props => props.theme.colors.LightGreen};
     }
 `;
 
@@ -68,7 +65,7 @@ export const ProductQuantity = styled.div`
 `;
 
 export const ProductButtons = styled.div`
-    margin-top: 10px;
+    margin-top: 32px;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -76,7 +73,7 @@ export const ProductButtons = styled.div`
 
     button:first-child{
         font-size: 1rem;
-        padding: 5px 10px;
+        padding: 10px 15px;
     }
 
     button{

@@ -14,12 +14,12 @@ export const Container = styled.div<{ status: boolean; }>`
     justify-content: center;
 `;
 
-export const ModalBody = styled.div`
+export const ModalBody = styled.div<{ bodyType: string; }>`
     max-width: 100vw;
     max-height: 90vh;
     overflow: auto;
 
-    background-color: ${props => props.theme.colors.White};
+    background-color: ${props => props.bodyType === "register" ? props.theme.colors.DarkGreen : props.theme.colors.White};
     border-radius: 20px;
     box-shadow: 0px 0px 50px black;
 `;
