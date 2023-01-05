@@ -5,6 +5,7 @@ import { Cart } from "./components/Cart"
 import { MenuItem } from "./components/MenuItem"
 import { PrivateRoute } from "./components/PrivateRoute"
 import { HomeScreen } from './pages/HomeScreen'
+import { Login } from "./pages/Login"
 
 import { ThemeProvider } from 'styled-components'
 import { Container, Menu, PageBody } from "./styles/AppStyled"
@@ -32,6 +33,7 @@ function App(){
                             <Route path="/" element={<HomeScreen />} />
                             <Route path="/orders" element={<PrivateRoute><HomeScreen /></PrivateRoute>} />
                             <Route path="/profile" element={<PrivateRoute><HomeScreen /></PrivateRoute>} />
+                            <Route path="/authentication" element={<Login />} />
                         </Routes>
                     </PageBody>
 

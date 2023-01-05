@@ -12,7 +12,7 @@ import { ProductsDataType } from "../../types/products"
 
 import { CategoryArea, CategoryList, Container, ProductArea, ProductList, ProductPaginationArea, ProductPaginationItem } from './styled'
 
-import { ModalLogin } from "../../components/ModalLogin"
+import { ModalProduct } from "../../components/ModalProduct"
 import foodAndRestaurant from '/assets/food-and-restaurant.png'
 
 let searchTimer: any = null
@@ -27,7 +27,7 @@ export const HomeScreen = () => {
     const [activePage, setActivePage] = useState<number>(1)
     const [activeSearch, setActiveSearch] = useState<string>('')
 
-    const [modalStatus, setModalStatus] = useState<boolean>(true)
+    const [modalStatus, setModalStatus] = useState<boolean>(false)
     const [modalData, setModalData] = useState<ProductsDataType>({})
 
     async function getProducts() {
@@ -130,8 +130,7 @@ export const HomeScreen = () => {
             }
 
             <Modal status={modalStatus} setStatus={setModalStatus}>
-                {/* <ModalProduct data={modalData} setStatus={setModalStatus} /> */}
-                <ModalLogin />
+                <ModalProduct data={modalData} setStatus={setModalStatus} />
             </Modal>
         </Container>
     )

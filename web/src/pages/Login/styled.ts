@@ -3,7 +3,12 @@ import styled from "styled-components";
 export const Container = styled.div`
     max-width: 650px;
     width: 100%;
+
     padding: 20px;
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
 `;
 
 export const LoginArea = styled.div`
@@ -23,24 +28,14 @@ export const LoginArea = styled.div`
             font-weight: 500;
             font-size: 1.38rem;
 
-            &.login{
-                background-color: ${props => props.theme.colors.DarkGreen};
-                color: ${props => props.theme.colors.White};
-            }
+            background-color: ${props => props.theme.colors.DarkGreen};
+            color: ${props => props.theme.colors.White};
 
-            &.login:not(.active){
+            &:not(.active){
+                background-color: transparent;
                 border: 1px solid ${props => props.theme.colors.White};
                 color: ${props => props.theme.colors.White};
-            }
-
-            &.register{
-                background-color: ${props => props.theme.colors.White};
-                color: ${props => props.theme.colors.DarkGreen};
-            }
-
-            &.register:not(.active){
-                border: 1px solid ${props => props.theme.colors.DarkGreen};
-                color: ${props => props.theme.colors.DarkGreen};
+                opacity: 0.7;
             }
         }
     }
@@ -54,15 +49,43 @@ export const LoginArea = styled.div`
             margin-bottom: 8px;
             font-weight: 500;
             font-size: 1.3rem;
+
+            color: ${props => props.theme.colors.White};
         }
 
         input{
+            border: none;
             outline: 0;
-            border-radius: 5px;
+            border-radius: 10px;
             padding-left: 8px;
 
             font-size: 1rem;
             height: 40px;
+        }
+    }
+`;
+
+export const RememberMe = styled.div`
+    label{
+        margin-left: 8px;
+        color: ${props => props.theme.colors.White};
+    }
+
+    input{
+        width: 16px;
+        height: 16px;
+        position: relative;
+        top: 2.4px;
+    }
+
+    input:checked{
+        &::after{
+            content: "";
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background-color: ${props => props.theme.colors.DarkGreen};
+            border-radius: 5px;
         }
     }
 `;
@@ -76,4 +99,7 @@ export const SubmitButton = styled.button`
     padding: 8px 32px;
     font-weight: 500;
     font-size: 1.38rem;
+
+    background-color: ${props => props.theme.colors.DarkGreen};
+    color: ${props => props.theme.colors.White};
 `;

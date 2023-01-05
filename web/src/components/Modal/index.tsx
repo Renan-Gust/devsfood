@@ -1,4 +1,5 @@
 import { Dispatch, MouseEvent, SetStateAction } from "react";
+
 import { Container, ModalBody } from "./styled";
 
 interface ModalProps {
@@ -16,7 +17,7 @@ export function Modal({ children, status, setStatus }: ModalProps) {
 
     return(
         <Container className="overlay" status={status} onClick={(e) => handleChangeModalStatus(e)}>
-            <ModalBody bodyType="register">
+            <ModalBody>
                 {children}
             </ModalBody>
         </Container>
