@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { useCart } from '../../contexts/Context';
+import { useCart } from '../../contexts/CartContext';
 
 import { ProductsDataType } from '../../types/products';
 

@@ -13,7 +13,7 @@ export const Context = createContext<ContextType>({
     dispatch: () => null
 })
 
-export const ContextProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
+export const CartContextProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
     const [state, dispatch] = useReducer(cartReducer, cartInitialState)
 
     return(

@@ -6,7 +6,7 @@ import { Header } from "../../components/Header"
 import { Modal } from "../../components/Modal"
 import { ProductItem } from "../../components/ProductItem"
 
-import { api } from "../../api"
+import { api } from "../../services/api"
 import { CategoriesType } from "../../types/categories"
 import { ProductsDataType } from "../../types/products"
 

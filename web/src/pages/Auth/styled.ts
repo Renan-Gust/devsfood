@@ -65,31 +65,6 @@ export const LoginArea = styled.div`
     }
 `;
 
-export const RememberMe = styled.div`
-    label{
-        margin-left: 8px;
-        color: ${props => props.theme.colors.White};
-    }
-
-    input{
-        width: 16px;
-        height: 16px;
-        position: relative;
-        top: 2.4px;
-    }
-
-    input:checked{
-        &::after{
-            content: "";
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            background-color: ${props => props.theme.colors.DarkGreen};
-            border-radius: 5px;
-        }
-    }
-`;
-
 export const SubmitButton = styled.button`
     box-shadow: 4px 5px 0px rgb(0 0 0 / 16%);
     border-radius: 5px;

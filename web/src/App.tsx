@@ -4,13 +4,14 @@ import ReactTooltip from "react-tooltip"
 import { Cart } from "./components/Cart"
 import { MenuItem } from "./components/MenuItem"
 import { PrivateRoute } from "./components/PrivateRoute"
+import { Auth } from "./pages/Auth"
 import { HomeScreen } from './pages/HomeScreen'
-import { Login } from "./pages/Login"
 
 import { ThemeProvider } from 'styled-components'
 import { Container, Menu, PageBody } from "./styles/AppStyled"
 import { theme } from './styles/colors'
 import { GlobalStyle } from './styles/global'
+
 
 import order from '/assets/order.png'
 import profile from '/assets/profile.png'
@@ -33,11 +34,12 @@ function App(){
                             <Route path="/" element={<HomeScreen />} />
                             <Route path="/orders" element={<PrivateRoute><HomeScreen /></PrivateRoute>} />
                             <Route path="/profile" element={<PrivateRoute><HomeScreen /></PrivateRoute>} />
-                            <Route path="/authentication" element={<Login />} />
+                            <Route path="/authentication" element={<Auth />} />
                         </Routes>
                     </PageBody>
 
                     <Cart />
+
                     <ReactTooltip id="tip-top" place="top" effect="solid" />
                     <ReactTooltip id="tip-right" place="right" effect="solid" />
                 </Container>

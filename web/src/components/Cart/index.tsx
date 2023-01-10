@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useCart } from '../../contexts/Context'
+import { useCart } from '../../contexts/CartContext'
 
 import { Address, AddressArea, CartArea, CartBody, CartHeader, CartIcon, CartText, CouponArea, DeliveryArea, EditAddress, FinishOrderButton, OrderArea, ProductInfoArea, ProductItem, ProductQuantityArea, ProductsArea } from './styled'
 
@@ -12,7 +12,7 @@ import plus from '/assets/plus.png'
 export function Cart() {
     const {state, dispatch} = useCart()
 
-    const [show, setShow] = useState<boolean>(true)
+    const [show, setShow] = useState<boolean>(false)
 
     function handleCartClick() {
         setShow(!show)

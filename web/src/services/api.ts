@@ -1,11 +1,14 @@
-import { Categories } from "./types/categories";
-import { Products } from "./types/products";
+import { signInRequestData, signInResponseData } from "../types/auth";
+import { Categories } from "../types/categories";
+import { Products } from "../types/products";
+import { callFetch } from "./helpers";
 
 let BASE = "http://localhost/projetos/devsfood/server/public"
 
 interface ApiType {
     getCategories: () => Promise<Categories>;
     getProducts: (search: string, page: number, category: number) => Promise<Products>;
+    signInRequest: (data: signInRequestData) => Promise<signInResponseData>;
 }
 
 interface FieldsType {
@@ -16,8 +19,8 @@ interface FieldsType {
 
 export const api: ApiType = {
     getCategories: async () => {
-        const response = await fetch(`${BASE}/categories`)
-        const json = await response.json()
+        const response = await callFetch("GET", `${BASE}/categories`)
+        const json = await response?.json()
 
         return json
     },
@@ -40,8 +43,15 @@ export const api: ApiType = {
         const toString = JSON.stringify(fields)
         const queryString = new URLSearchParams(JSON.parse(toString)).toString()
 
-        const response = await fetch(`${BASE}/products?${queryString}`)
-        const json = await response.json()
+        const response = await callFetch("GET", `${BASE}/products?${queryString}`)
+        const json = await response?.json()
+
+        return json
+    },
+
+    signInRequest: async (data: signInRequestData) => {
+        const response = await callFetch("POST", `${BASE}/users`, data)
+        const json = await response?.json()
 
         return json
     }
