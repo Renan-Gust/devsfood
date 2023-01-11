@@ -7,7 +7,8 @@ use src\helpers\UserHelper;
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: *');
-header('Content-Type: application/json');
+header('Content-Type: application/x-www-form-urlencoded');
+header('Access-Control-Allow-Headers: *');
 
 class UserController extends Controller
 {
@@ -16,15 +17,21 @@ class UserController extends Controller
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $password = filter_input(INPUT_POST, 'password');
 
-        $result = [];
+        // $result = [];
+        $result = [
+            "email" => $email,
+            "password" => $password
+        ];
+
+        echo json_encode($result);
+        die();
 
         if ($email && $password) {
-            $token = UserHelper::verifyLogin($email, $password);
+            $user = UserHelper::verifyLogin($email, $password);
 
-            if ($token) {
-                $_SESSION['token'] = $token;
-
+            if ($user) {
                 $result["status"] = "success";
+                $result["user"] = $user;
                 echo json_encode($result);
             } else {
                 $result["status"] = "failed";
@@ -51,12 +58,11 @@ class UserController extends Controller
                 $result["message"] = "E-mail já existe.";
                 echo json_encode($result);
             } else {
-                $token = UserHelper::createUser($name, $email, $password);
+                $user = UserHelper::createUser($name, $email, $password);
 
-                if ($token) {
-                    $_SESSION['token'] = $token;
-
+                if ($user) {
                     $result["status"] = "success";
+                    $result["user"] = $user;
                     echo json_encode($result);
                 }
             }

@@ -9,20 +9,16 @@ date_default_timezone_set('America/Sao_Paulo');
 class UserHelper
 {
     // Check if you are logged
-    public static function checkLogin()
+    public static function checkLogin($token)
     {
-        if (!empty($_SESSION['token'])) {
-            $token = $_SESSION['token'];
-            $data = User::select()->where('token', $token)->one();
+        $data = User::select()->where('token', $token)->one();
 
-            if (count($data) > 0) {
-                $loggedUser = new User();
-
-                $loggedUser->id = $data['id'];
-                $loggedUser->name = $data['name'];
-
-                return $loggedUser;
-            }
+        if (count($data) > 0) {
+            return [
+                "user" => [
+                    "name" => $data['name']
+                ]
+            ];
         }
 
         return false;
@@ -42,7 +38,15 @@ class UserHelper
                     ->where('email', $email)
                     ->execute();
 
-                return $token;
+                return [
+                    "token" => [
+                        "value" => $token,
+                        "expiresAt" => 7
+                    ],
+                    "user" => [
+                        "name" => $user['name']
+                    ]
+                ];
             }
         }
 
@@ -61,7 +65,7 @@ class UserHelper
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $token = md5(time() . rand(0, 9999) . time());
 
-        User::insert([
+        $user = User::insert([
             "name" => $name,
             "email" => $email,
             "password" => $hash,
@@ -70,6 +74,14 @@ class UserHelper
             "updated_at" => date('Y-m-d H:i:s'),
         ])->execute();
 
-        return $token;
+        return [
+            "token" => [
+                "value" => $token,
+                "expiresAt" => 7
+            ],
+            "user" => [
+                "name" => $user['name']
+            ]
+        ];
     }
 }

@@ -1,14 +1,19 @@
-import { signInRequestData, signInResponseData } from "../types/auth";
-import { Categories } from "../types/categories";
-import { Products } from "../types/products";
-import { callFetch } from "./helpers";
+import axios from "axios";
 
-let BASE = "http://localhost/projetos/devsfood/server/public"
+import { signInRequestData } from "../types/auth";
+
+const server = axios.create({
+    baseURL: 'http://localhost/projetos/devsfood/server/public',
+})
+
+server.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
+server.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 
 interface ApiType {
-    getCategories: () => Promise<Categories>;
-    getProducts: (search: string, page: number, category: number) => Promise<Products>;
-    signInRequest: (data: signInRequestData) => Promise<signInResponseData>;
+    // getCategories: () => Promise<Categories>;
+    // getProducts: (search: string, page: number, category: number) => Promise<Products>;
+    // signInRequest: (data: signInRequestData) => Promise<signInResponseData>;
+    signInRequest: (data: signInRequestData) => Promise<any>;
 }
 
 interface FieldsType {
@@ -18,41 +23,59 @@ interface FieldsType {
 }
 
 export const api: ApiType = {
-    getCategories: async () => {
-        const response = await callFetch("GET", `${BASE}/categories`)
-        const json = await response?.json()
+    // getCategories: async () => {
+    //     const response = await callFetch("GET", `${baseURL}/categories`)
+    //     const json = await response?.json()
 
-        return json
-    },
+    //     return json
+    // },
 
-    getProducts: async (search: string, page: number, category: number) => {
-        let fields: FieldsType = {}
+    // getProducts: async (search: string, page: number, category: number) => {
+    //     let fields: FieldsType = {}
 
-        if(category !== 0){
-            fields.category = category
-        }
+    //     if(category !== 0){
+    //         fields.category = category
+    //     }
 
-        if(page > 0){
-            fields.page = page
-        }
+    //     if(page > 0){
+    //         fields.page = page
+    //     }
 
-        if(search !== ''){
-            fields.search = search
-        }
+    //     if(search !== ''){
+    //         fields.search = search
+    //     }
 
-        const toString = JSON.stringify(fields)
-        const queryString = new URLSearchParams(JSON.parse(toString)).toString()
+    //     const toString = JSON.stringify(fields)
+    //     const queryString = new URLSearchParams(JSON.parse(toString)).toString()
 
-        const response = await callFetch("GET", `${BASE}/products?${queryString}`)
-        const json = await response?.json()
+    //     const response = await callFetch("GET", `${baseURL}/products?${queryString}`)
+    //     const json = await response?.json()
 
-        return json
-    },
+    //     return json
+    // },
 
     signInRequest: async (data: signInRequestData) => {
-        const response = await callFetch("POST", `${BASE}/users`, data)
-        const json = await response?.json()
+        const data2 = {
+            email: "rnena@gmail.com",
+            password: "dadadaddasd"
+        }
 
-        return json
+
+
+        try{
+            const t = await server.post('/login', {
+                email: "Renan@gmail.com",
+                password: "1234"
+            })
+
+            console.log(t)
+        } catch (error) {
+            console.log(error);
+        }
+        
+        // console.log(response)
+
+
+        return []
     }
 }

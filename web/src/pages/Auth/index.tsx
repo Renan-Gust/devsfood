@@ -14,7 +14,9 @@ type RegisterFormProps = {
 
 export function Auth(){
     const [formActive, setFormActive] = useState<FormActiveType['type']>('login')
-    const [toastText, setToastText] = useState<string>('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [toastText, setToastText] = useState('')
     const buttonActiveClassName = "active"
 
     const { signIn } = useAuth()
@@ -35,17 +37,20 @@ export function Auth(){
         }
     }
 
-    function handleSignIn(event: FormEvent){
+    async function handleSignIn(event: FormEvent){
         event.preventDefault()
-
-        const formData = new FormData(event.target as HTMLFormElement)
-        const data = Object.fromEntries(formData)
-
-        if(!data.email || !data.password){
+        if(!email || !password){
             setToastText("Email e senha precisam ser preenchidos")
+            return
         }
 
-        console.log(data)
+        // try{
+        //     await signIn({ email, password })
+        // } catch (err){
+        //     console.log(err)
+        // }
+
+        await signIn({ email, password })
     }
 
     function handleSignUp(){}
@@ -68,6 +73,7 @@ export function Auth(){
                                     id="email"
                                     name="email"
                                     placeholder="Digite seu E-mail..."
+                                    onChange={(e) => setEmail(e.target.value)}
                                 />
                             </div>
 
@@ -78,6 +84,7 @@ export function Auth(){
                                     id="password" 
                                     name="password"
                                     placeholder="Digite sua senha..."
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
                             </div>
 

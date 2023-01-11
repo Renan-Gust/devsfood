@@ -4,7 +4,10 @@ export interface signInRequestData {
 }
 
 export interface signInResponseData {
-    token: string;
+    token: {
+        value: string;
+        expiresAt: number;
+    };
     user: {
         name: string;
     }

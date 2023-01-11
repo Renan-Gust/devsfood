@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 17-Dez-2022 às 20:00
+-- Tempo de geração: 11-Jan-2023 às 22:15
 -- Versão do servidor: 10.4.24-MariaDB
 -- versão do PHP: 7.4.29
 
@@ -88,6 +88,30 @@ INSERT INTO `products` (`id`, `image`, `name`, `price`, `ingredients`) VALUES
 (3, 'https://api.b7web.com.br/devsfood/media/products/tortamorango.jpg', 'Torta de Morango', '128.12', 'Morango, farinha, ovo'),
 (4, 'https://api.b7web.com.br/devsfood/media/products/donutchocolate.jpg', 'Donut de chocolate', '1.50', 'Chocolate, frango, sal');
 
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `token` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Extraindo dados da tabela `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `token`, `created_at`, `updated_at`) VALUES
+(1, 'Renan Gustavo', 'renangustavo7429@gmail.com', '$2y$10$CzAelH5fAnfOmomcDNHfZeCuBA1BuPOpNQlEuuJXqmfG1X4vIoeYi', '9d1ffa7eccdd24643e2d308b0dce3605', '2022-12-31 03:20:58', '2022-12-31 03:20:58'),
+(2, 'Renan Gustavo', 'renandevfullstack@gmail.com', '$2y$10$Ww6ntFV9QG9/4NXr6OG3XeVxkmWCRqbEai6a6.9pXuHSuluOiPi3i', 'ff7bd507db7c7a599027da09e6bc7560', '2022-12-30 23:22:59', '2022-12-30 23:22:59');
+
 --
 -- Índices para tabelas despejadas
 --
@@ -113,6 +137,12 @@ ALTER TABLE `products`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Índices para tabela `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT de tabelas despejadas
 --
 
@@ -133,6 +163,12 @@ ALTER TABLE `productcategorys`
 --
 ALTER TABLE `products`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de tabela `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restrições para despejos de tabelas
