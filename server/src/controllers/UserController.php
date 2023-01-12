@@ -7,24 +7,29 @@ use src\helpers\UserHelper;
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: *');
-header('Content-Type: application/x-www-form-urlencoded');
-header('Access-Control-Allow-Headers: *');
+// header('Content-Type: application/json');
 
 class UserController extends Controller
 {
     public function signIn()
     {
-        $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        // $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $password = filter_input(INPUT_POST, 'password');
+        $token = filter_input(INPUT_POST, 'token');
 
-        // $result = [];
+        $email = $_POST['email'];
+
+        // $result = [
+        //     "test" => "Testando..."
+        // ];
+        $t = json_decode($_POST['data2']);
         $result = [
-            "email" => $email,
-            "password" => $password
+            "email" => $_POST,
+            "email2" => $_POST['email']
         ];
 
         echo json_encode($result);
-        die();
+        exit();
 
         if ($email && $password) {
             $user = UserHelper::verifyLogin($email, $password);

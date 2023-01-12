@@ -3,7 +3,8 @@ import axios from "axios";
 import { signInRequestData } from "../types/auth";
 
 const server = axios.create({
-    baseURL: 'http://localhost/projetos/devsfood/server/public',
+    // baseURL: 'http://localhost/projetos/devsfood/server/public',
+    baseURL: 'http://localhost/devsfood/server/public',
 })
 
 server.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
@@ -57,21 +58,34 @@ export const api: ApiType = {
     signInRequest: async (data: signInRequestData) => {
         const data2 = {
             email: "rnena@gmail.com",
-            password: "dadadaddasd"
+            password: "dadadaddasd",
+            token: `Bearer 37r27dbadbasydboad732q9qadk-d49t[s]`
         }
 
 
 
-        try{
-            const t = await server.post('/login', {
-                email: "Renan@gmail.com",
-                password: "1234"
-            })
+        // try{
+            // server.defaults.headers['Authorization'] = `Bearer 37r27dbadbasydboad732q9qadk-d49t[s]`
 
-            console.log(t)
-        } catch (error) {
-            console.log(error);
-        }
+            // const t = await server.post('/login', {
+            //     email: "rnena@gmail.com",
+            //     password: "dadadaddasd"
+            // })
+            let t: any = {}
+
+            await fetch('http://localhost/devsfood/server/public/login', {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: JSON.stringify(data2)
+            }).then((response) => response.json()).then((r) => t = r)
+            console.log(t.email)
+            console.log(t.email2)
+        // } catch (error) {
+        //     console.log(error);
+        // }
         
         // console.log(response)
 
