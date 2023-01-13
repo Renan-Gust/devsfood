@@ -8,5 +8,6 @@ $router->get('/products?{filters}', 'ProductController@getProducts');
 $router->get('/categories', 'CategoryController@getCategories');
 $router->post('/login', 'UserController@signIn');
 $router->post('/register', 'UserController@signUp');
+$router->post('/check-login', 'UserController@checkLogin');
 // $router->get('/user/orders', 'OrderController@index');
 // $router->get('/sobre/{nome}', 'HomeController@sobreP');

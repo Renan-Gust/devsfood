@@ -13,7 +13,7 @@ class UserHelper
     {
         $data = User::select()->where('token', $token)->one();
 
-        if (count($data) > 0) {
+        if (count(array($data)) > 0) {
             return [
                 "user" => [
                     "name" => $data['name']
@@ -32,11 +32,14 @@ class UserHelper
             if (password_verify($password, $user['password'])) {
                 $token = md5(time() . rand(0, 9999) . time());
 
-                User::update()
-                    ->set('token', $token)
-                    ->set('update_at', date('Y-m-d H:i:s'))
-                    ->where('email', $email)
-                    ->execute();
+                $currentDay = date('Y-m-d H:i:s');
+                $tokenExpiresAt = date('Y-m-d H:i:s', strtotime("+7 days", strtotime($currentDay)));
+
+                User::update([
+                    "token" => $token,
+                    "token_expires_at" => $tokenExpiresAt,
+                    "updated_at" => $currentDay
+                ])->where("email", $email)->execute();
 
                 return [
                     "token" => [
@@ -65,13 +68,16 @@ class UserHelper
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $token = md5(time() . rand(0, 9999) . time());
 
-        $user = User::insert([
+        $currentDay = date('Y-m-d H:i:s');
+
+        User::insert([
             "name" => $name,
             "email" => $email,
             "password" => $hash,
             "token" => $token,
-            "created_at" => date('Y-m-d H:i:s'),
-            "updated_at" => date('Y-m-d H:i:s'),
+            "token_expires_at" => date('Y-m-d H:i:s', strtotime("+7 days", strtotime($currentDay))),
+            "created_at" => $currentDay,
+            "updated_at" => $currentDay
         ])->execute();
 
         return [
@@ -80,7 +86,7 @@ class UserHelper
                 "expiresAt" => 7
             ],
             "user" => [
-                "name" => $user['name']
+                "name" => $name
             ]
         ];
     }

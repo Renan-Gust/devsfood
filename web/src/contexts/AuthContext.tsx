@@ -1,14 +1,18 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
+import Cookies from "js-cookie";
 
 import { api } from '../services/api';
-import { signInRequestData, userType } from "../types/auth";
+import { signInRequestData, signInResponseData, userType } from "../types/auth";
 
 type AuthContextType = {
+    test: boolean;
     isAuthenticated: boolean;
     user: userType | null;
-    signIn: (data: signInRequestData) => Promise<void>;
+    signIn: (data: signInRequestData) => Promise<signInResponseData>;
     loading: boolean;
+    setUser: any;
+    setTest: any;
 }
 
 export const Context = createContext({} as AuthContextType)
@@ -16,50 +20,48 @@ export const Context = createContext({} as AuthContextType)
 export const AuthContextProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
     const [user, setUser] = useState<AuthContextType['user']>(null)
     const [loading, setLoading] = useState(true)
+    const [test, setTest] = useState(false)
 
-    // useEffect(() => {
-        // Verificar se tem algum cookies salvo
-        // if(Cookie.get('auth.token')){
-            // const { token: { value, expiresAt }, user } = await api.signInRequest({
-            //     email,
-            //     password
-            // })
-        // }
+    useEffect(() => {
+        (async () => {
+            const token = Cookies.get('auth.token')
 
-        // true
-        // api.verifyLogin
+            if(token){
+                const response = await api.checkLogin({ token })
 
-        // setUser(infoRecuperada)
+                if(response.status === 'success'){
+                    setUser(response.data.user)
+                    
+                    setTest(true)
+                    console.log(response)
+                }
+            }
+        })()
 
-        // setLoading(false)
-    // }, [])
+        setLoading(false)
+    }, [])
 
     async function signIn({ email, password }: signInRequestData){
-        // const { token: { value, expiresAt }, user } = await api.signInRequest({
-        //     email,
-        //     password
-        // })
+        const response = await api.signInRequest({
+            email,
+            password
+        })
 
-        // console.log(value, expiresAt, user)
-
-        // Cookies.set("auth.token", value, { expires: expiresAt })
-        // setUser(user)
-        try{
-            const resp = await api.signInRequest({
-                email,
-                password
-            })
-
-            console.log(resp)
-        } catch(err){
-            console.log(err)
+        if(response.status === 'success'){
+            Cookies.set("auth.token", response.data.token.value, { expires: response.data.token.expiresAt })
+            setUser(response.data.user)
+            
+            console.log(response)
+            return response
+        } else{
+            return response
         }
     }
 
     const isAuthenticated = !!user
 
     return(
-        <Context.Provider value={{ isAuthenticated, user, signIn, loading }}>
+        <Context.Provider value={{ isAuthenticated, test, user, signIn, loading, setUser, setTest }}>
             {children}
         </Context.Provider>
     )

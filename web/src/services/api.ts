@@ -1,20 +1,14 @@
-import axios from "axios";
+import { checkLoginRequestData, checkLoginResponseData, signInRequestData, signInResponseData } from "../types/auth";
+import { Categories } from "../types/categories";
+import { Products } from "../types/products";
 
-import { signInRequestData } from "../types/auth";
-
-const server = axios.create({
-    // baseURL: 'http://localhost/projetos/devsfood/server/public',
-    baseURL: 'http://localhost/devsfood/server/public',
-})
-
-server.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
-server.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+const baseURL = 'http://localhost/projetos/devsfood/server/public'
 
 interface ApiType {
-    // getCategories: () => Promise<Categories>;
-    // getProducts: (search: string, page: number, category: number) => Promise<Products>;
-    // signInRequest: (data: signInRequestData) => Promise<signInResponseData>;
-    signInRequest: (data: signInRequestData) => Promise<any>;
+    getCategories: () => Promise<Categories>;
+    getProducts: (search: string, page: number, category: number) => Promise<Products>;
+    signInRequest: (data: signInRequestData) => Promise<signInResponseData>;
+    checkLogin: (data: checkLoginRequestData) => Promise<checkLoginResponseData>;
 }
 
 interface FieldsType {
@@ -24,72 +18,79 @@ interface FieldsType {
 }
 
 export const api: ApiType = {
-    // getCategories: async () => {
-    //     const response = await callFetch("GET", `${baseURL}/categories`)
-    //     const json = await response?.json()
+    getCategories: async () => {
+        try{
+            const response = await fetch(`${baseURL}/categories`)
+            const json = await response.json()
+    
+            return json
+        } catch (error) {
+            console.log(error)
+        }
+    },
 
-    //     return json
-    // },
+    getProducts: async (search: string, page: number, category: number) => {
+        let fields: FieldsType = {}
 
-    // getProducts: async (search: string, page: number, category: number) => {
-    //     let fields: FieldsType = {}
-
-    //     if(category !== 0){
-    //         fields.category = category
-    //     }
-
-    //     if(page > 0){
-    //         fields.page = page
-    //     }
-
-    //     if(search !== ''){
-    //         fields.search = search
-    //     }
-
-    //     const toString = JSON.stringify(fields)
-    //     const queryString = new URLSearchParams(JSON.parse(toString)).toString()
-
-    //     const response = await callFetch("GET", `${baseURL}/products?${queryString}`)
-    //     const json = await response?.json()
-
-    //     return json
-    // },
-
-    signInRequest: async (data: signInRequestData) => {
-        const data2 = {
-            email: "rnena@gmail.com",
-            password: "dadadaddasd",
-            token: `Bearer 37r27dbadbasydboad732q9qadk-d49t[s]`
+        if(category !== 0){
+            fields.category = category
         }
 
+        if(page > 0){
+            fields.page = page
+        }
 
+        if(search !== ''){
+            fields.search = search
+        }
 
-        // try{
-            // server.defaults.headers['Authorization'] = `Bearer 37r27dbadbasydboad732q9qadk-d49t[s]`
+        const toString = JSON.stringify(fields)
+        const queryString = new URLSearchParams(JSON.parse(toString)).toString()
 
-            // const t = await server.post('/login', {
-            //     email: "rnena@gmail.com",
-            //     password: "dadadaddasd"
-            // })
-            let t: any = {}
+        try{
+            const response = await fetch(`${baseURL}/products?${queryString}`)
+            const json = await response.json()
+    
+            return json
+        } catch (error) {
+            console.log(error)
+        }
+    },
 
-            await fetch('http://localhost/devsfood/server/public/login', {
+    signInRequest: async (data: signInRequestData) => {
+        try{
+            const response = await fetch(`${baseURL}/login`, {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
-                body: JSON.stringify(data2)
-            }).then((response) => response.json()).then((r) => t = r)
-            console.log(t.email)
-            console.log(t.email2)
-        // } catch (error) {
-        //     console.log(error);
-        // }
-        
-        // console.log(response)
+                body: JSON.stringify(data)
+            })
 
+            const json = await response.json()
+            return json
+        } catch (error) {
+            console.log(error)
+        }
+    },
 
-        return []
+    // Check if you are logged
+    checkLogin: async (data: checkLoginRequestData) => {
+        try{
+            const response = await fetch(`${baseURL}/check-login`, {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: JSON.stringify(data)
+            })
+
+            const json = await response.json()
+            return json
+        } catch (error) {
+            console.log(error)
+        }
     }
 }

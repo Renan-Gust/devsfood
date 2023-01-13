@@ -6,12 +6,12 @@ import { MenuItem } from "./components/MenuItem"
 import { PrivateRoute } from "./components/PrivateRoute"
 import { Auth } from "./pages/Auth"
 import { HomeScreen } from './pages/HomeScreen'
+import { Orders } from "./pages/Orders"
 
 import { ThemeProvider } from 'styled-components'
 import { Container, Menu, PageBody } from "./styles/AppStyled"
 import { theme } from './styles/colors'
 import { GlobalStyle } from './styles/global'
-
 
 import order from '/assets/order.png'
 import profile from '/assets/profile.png'
@@ -32,7 +32,7 @@ function App(){
                     <PageBody>
                         <Routes>
                             <Route path="/" element={<HomeScreen />} />
-                            <Route path="/orders" element={<PrivateRoute><HomeScreen /></PrivateRoute>} />
+                            <Route path="/orders" element={<PrivateRoute><Orders /></PrivateRoute>} />
                             <Route path="/profile" element={<PrivateRoute><HomeScreen /></PrivateRoute>} />
                             <Route path="/authentication" element={<Auth />} />
                         </Routes>

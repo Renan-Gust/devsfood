@@ -1,4 +1,5 @@
 import { FormEvent, MouseEvent, useState } from 'react';
+
 import { Toast } from '../../components/Toast';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -44,13 +45,13 @@ export function Auth(){
             return
         }
 
-        // try{
-        //     await signIn({ email, password })
-        // } catch (err){
-        //     console.log(err)
-        // }
+        const response = await signIn({ email, password })
+        if(response.status === 'failed'){
+            setToastText(response.message ?? 'Ocorreu algum erro!')
+            return
+        }
 
-        await signIn({ email, password })
+        // <Navigate to="/" />
     }
 
     function handleSignUp(){}
