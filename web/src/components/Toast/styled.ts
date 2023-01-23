@@ -4,7 +4,7 @@ export const Container = styled.div`
     background-color: ${props => props.theme.colors.LightGreen};
     border-radius: 10px;
 
-    width: 310px;
+    width: 360px;
     height: 70px;
     position: absolute;
     bottom: 20px;

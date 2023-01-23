@@ -90,4 +90,15 @@ class UserHelper
             ]
         ];
     }
+
+    public static function validadeEmail($result, $email)
+    {
+        if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            http_response_code(401);
+            $result["status"] = "failed";
+            $result["message"] = "Por favor informe um email válido!";
+            echo json_encode($result);
+            exit;
+        }
+    }
 }

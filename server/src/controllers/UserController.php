@@ -17,16 +17,10 @@ class UserController extends Controller
 
         $data = json_decode(file_get_contents('php://input'), true);
 
-        $email = $data['email'];
-        $password = $data['password'];
+        $email = isset($data['email']) ? $data['email'] : null;
+        $password = isset($data['password']) ? $data['password'] : null;
 
-        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-            http_response_code(404);
-            $result["status"] = "failed";
-            $result["message"] = "Por favor informe um email válido!";
-            echo json_encode($result);
-            exit;
-        }
+        UserHelper::validadeEmail($result, $email);
 
         if ($email && $password) {
             $user = UserHelper::verifyLogin($email, $password);
@@ -54,14 +48,19 @@ class UserController extends Controller
 
     public function signUp()
     {
-        $name = filter_input(INPUT_POST, 'name');
-        $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $password = filter_input(INPUT_POST, 'password');
-
         $result = [];
+
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        $name = isset($data['name']) ? $data['name'] : null;
+        $email = isset($data['email']) ? $data['email'] : null;
+        $password = isset($data['password']) ? $data['password'] : null;
+
+        UserHelper::validadeEmail($result, $email);
 
         if ($name && $email && $password) {
             if (UserHelper::emailExists($email)) {
+                http_response_code(401);
                 $result["status"] = "failed";
                 $result["message"] = "E-mail já existe.";
                 echo json_encode($result);

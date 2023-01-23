@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 11-Jan-2023 às 22:15
--- Versão do servidor: 10.4.24-MariaDB
--- versão do PHP: 7.4.29
+-- Generation Time: Jan 23, 2023 at 09:28 PM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,23 +18,23 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Banco de dados: `devsfood`
+-- Database: `devsfood`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `categorys`
+-- Table structure for table `categorys`
 --
 
 CREATE TABLE `categorys` (
   `id` int(11) UNSIGNED NOT NULL,
   `name` varchar(100) DEFAULT NULL,
   `image` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Extraindo dados da tabela `categorys`
+-- Dumping data for table `categorys`
 --
 
 INSERT INTO `categorys` (`id`, `name`, `image`) VALUES
@@ -45,17 +45,17 @@ INSERT INTO `categorys` (`id`, `name`, `image`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `productcategorys`
+-- Table structure for table `productcategorys`
 --
 
 CREATE TABLE `productcategorys` (
   `id` int(11) UNSIGNED NOT NULL,
   `product_id` int(11) UNSIGNED DEFAULT NULL,
   `category_id` int(11) UNSIGNED DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Extraindo dados da tabela `productcategorys`
+-- Dumping data for table `productcategorys`
 --
 
 INSERT INTO `productcategorys` (`id`, `product_id`, `category_id`) VALUES
@@ -67,7 +67,7 @@ INSERT INTO `productcategorys` (`id`, `product_id`, `category_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `products`
+-- Table structure for table `products`
 --
 
 CREATE TABLE `products` (
@@ -76,10 +76,10 @@ CREATE TABLE `products` (
   `name` varchar(100) DEFAULT NULL,
   `price` decimal(10,2) DEFAULT NULL,
   `ingredients` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Extraindo dados da tabela `products`
+-- Dumping data for table `products`
 --
 
 INSERT INTO `products` (`id`, `image`, `name`, `price`, `ingredients`) VALUES
@@ -91,7 +91,7 @@ INSERT INTO `products` (`id`, `image`, `name`, `price`, `ingredients`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
@@ -100,30 +100,33 @@ CREATE TABLE `users` (
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `token` varchar(255) DEFAULT NULL,
+  `token_expires_at` date DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Extraindo dados da tabela `users`
+-- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `password`, `token`, `created_at`, `updated_at`) VALUES
-(1, 'Renan Gustavo', 'renangustavo7429@gmail.com', '$2y$10$CzAelH5fAnfOmomcDNHfZeCuBA1BuPOpNQlEuuJXqmfG1X4vIoeYi', '9d1ffa7eccdd24643e2d308b0dce3605', '2022-12-31 03:20:58', '2022-12-31 03:20:58'),
-(2, 'Renan Gustavo', 'renandevfullstack@gmail.com', '$2y$10$Ww6ntFV9QG9/4NXr6OG3XeVxkmWCRqbEai6a6.9pXuHSuluOiPi3i', 'ff7bd507db7c7a599027da09e6bc7560', '2022-12-30 23:22:59', '2022-12-30 23:22:59');
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `token`, `token_expires_at`, `created_at`, `updated_at`) VALUES
+(1, 'Renan Gustavo', 'renangustavo7429@gmail.com', '$2y$10$CzAelH5fAnfOmomcDNHfZeCuBA1BuPOpNQlEuuJXqmfG1X4vIoeYi', '08d5a87cbad31e2d0f9a454cff05eec6', '2023-01-30', '2022-12-31 03:20:58', '2023-01-23 17:51:41'),
+(2, 'Renan Gustavo', 'renandevfullstack@gmail.com', '$2y$10$Ww6ntFV9QG9/4NXr6OG3XeVxkmWCRqbEai6a6.9pXuHSuluOiPi3i', '4b0f42dfaf63dc9ec6793f874e21e536', '2023-01-30', '2022-12-30 23:22:59', '2023-01-23 20:24:36'),
+(3, 'Renan Gostozo', 'renandevfullstac2k@gmail.com', '$2y$10$AbaoCTQTSfOam/SBhCPXHuvVklW.1g0bYApWvVk45/ilXStHRsMgu', 'd31972a9ebc55bb142d559f44de77fe3', '2023-01-30', '2023-01-23 20:25:59', '2023-01-23 20:25:59'),
+(4, 'Teste', 'teste@gmail.com', '$2y$10$jCKEF/Ox3h73zbehPh6gUOLnFKuT5lH8BPQIBWbKK7PTLrqyuhc0.', '8067073b0af91a5db4c23f4748751c5c', '2023-01-30', '2023-01-23 20:26:42', '2023-01-23 20:27:33');
 
 --
--- Índices para tabelas despejadas
+-- Indexes for dumped tables
 --
 
 --
--- Índices para tabela `categorys`
+-- Indexes for table `categorys`
 --
 ALTER TABLE `categorys`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices para tabela `productcategorys`
+-- Indexes for table `productcategorys`
 --
 ALTER TABLE `productcategorys`
   ADD PRIMARY KEY (`id`),
@@ -131,51 +134,51 @@ ALTER TABLE `productcategorys`
   ADD KEY `category_id` (`category_id`);
 
 --
--- Índices para tabela `products`
+-- Indexes for table `products`
 --
 ALTER TABLE `products`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices para tabela `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT de tabelas despejadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de tabela `categorys`
+-- AUTO_INCREMENT for table `categorys`
 --
 ALTER TABLE `categorys`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT de tabela `productcategorys`
+-- AUTO_INCREMENT for table `productcategorys`
 --
 ALTER TABLE `productcategorys`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT de tabela `products`
+-- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT de tabela `users`
+-- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- Restrições para despejos de tabelas
+-- Constraints for dumped tables
 --
 
 --
--- Limitadores para a tabela `productcategorys`
+-- Constraints for table `productcategorys`
 --
 ALTER TABLE `productcategorys`
   ADD CONSTRAINT `productcategorys_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,

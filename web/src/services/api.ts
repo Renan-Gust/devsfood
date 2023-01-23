@@ -1,4 +1,4 @@
-import { checkLoginRequestData, checkLoginResponseData, signInRequestData, signInResponseData } from "../types/auth";
+import { checkLoginRequestData, checkLoginResponseData, signInRequestData, signInResponseData, signUpRequestData } from "../types/auth";
 import { Categories } from "../types/categories";
 import { Products } from "../types/products";
 
@@ -9,6 +9,7 @@ interface ApiType {
     getProducts: (search: string, page: number, category: number) => Promise<Products>;
     signInRequest: (data: signInRequestData) => Promise<signInResponseData>;
     checkLogin: (data: checkLoginRequestData) => Promise<checkLoginResponseData>;
+    signUpRequest: (data: signUpRequestData) => Promise<signInResponseData>;
 }
 
 interface FieldsType {
@@ -79,6 +80,24 @@ export const api: ApiType = {
     checkLogin: async (data: checkLoginRequestData) => {
         try{
             const response = await fetch(`${baseURL}/check-login`, {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: JSON.stringify(data)
+            })
+
+            const json = await response.json()
+            return json
+        } catch (error) {
+            console.log(error)
+        }
+    },
+
+    signUpRequest: async (data: signUpRequestData) => {
+        try{
+            const response = await fetch(`${baseURL}/register`, {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',

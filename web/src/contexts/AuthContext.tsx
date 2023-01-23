@@ -1,18 +1,17 @@
-import { createContext, useContext, useEffect, useState } from "react";
-
 import Cookies from "js-cookie";
+import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 
 import { api } from '../services/api';
-import { signInRequestData, signInResponseData, userType } from "../types/auth";
+import { signInRequestData, signInResponseData, signUpRequestData, signUpResponseData, userType } from "../types/auth";
 
 type AuthContextType = {
-    test: boolean;
     isAuthenticated: boolean;
     user: userType | null;
     signIn: (data: signInRequestData) => Promise<signInResponseData>;
+    signUp: (data: signUpRequestData) => Promise<signUpResponseData>;
     loading: boolean;
-    setUser: any;
-    setTest: any;
+    pathname: string;
+    setPathname: Dispatch<SetStateAction<string>>;
 }
 
 export const Context = createContext({} as AuthContextType)
@@ -20,7 +19,7 @@ export const Context = createContext({} as AuthContextType)
 export const AuthContextProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
     const [user, setUser] = useState<AuthContextType['user']>(null)
     const [loading, setLoading] = useState(true)
-    const [test, setTest] = useState(false)
+    const [pathname, setPathname] = useState('')
 
     useEffect(() => {
         (async () => {
@@ -28,12 +27,9 @@ export const AuthContextProvider: React.FC<{children: React.ReactNode}> = ({ chi
 
             if(token){
                 const response = await api.checkLogin({ token })
-
+    
                 if(response.status === 'success'){
                     setUser(response.data.user)
-                    
-                    setTest(true)
-                    console.log(response)
                 }
             }
         })()
@@ -51,7 +47,23 @@ export const AuthContextProvider: React.FC<{children: React.ReactNode}> = ({ chi
             Cookies.set("auth.token", response.data.token.value, { expires: response.data.token.expiresAt })
             setUser(response.data.user)
             
-            console.log(response)
+            return response
+        } else{
+            return response
+        }
+    }
+
+    async function signUp({ name, email, password }: signUpRequestData){
+        const response = await api.signUpRequest({
+            name,
+            email,
+            password
+        })
+
+        if(response.status === 'success'){
+            Cookies.set("auth.token", response.data.token.value, { expires: response.data.token.expiresAt })
+            setUser(response.data.user)
+            
             return response
         } else{
             return response
@@ -61,7 +73,7 @@ export const AuthContextProvider: React.FC<{children: React.ReactNode}> = ({ chi
     const isAuthenticated = !!user
 
     return(
-        <Context.Provider value={{ isAuthenticated, test, user, signIn, loading, setUser, setTest }}>
+        <Context.Provider value={{ isAuthenticated, user, signIn, signUp, loading, pathname, setPathname }}>
             {children}
         </Context.Provider>
     )

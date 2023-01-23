@@ -4,7 +4,7 @@ import ReactTooltip from "react-tooltip"
 import { Cart } from "./components/Cart"
 import { MenuItem } from "./components/MenuItem"
 import { PrivateRoute } from "./components/PrivateRoute"
-import { Auth } from "./pages/Auth"
+import { Login } from "./pages/Auth/login"
 import { HomeScreen } from './pages/HomeScreen'
 import { Orders } from "./pages/Orders"
 
@@ -21,7 +21,7 @@ function App(){
     return(
         <ThemeProvider theme={theme}>
             <GlobalStyle />
-            <BrowserRouter>                
+            <BrowserRouter>
                 <Container>
                     <Menu>
                         <MenuItem icon={store} link="/" title="Loja" />
@@ -34,7 +34,7 @@ function App(){
                             <Route path="/" element={<HomeScreen />} />
                             <Route path="/orders" element={<PrivateRoute><Orders /></PrivateRoute>} />
                             <Route path="/profile" element={<PrivateRoute><HomeScreen /></PrivateRoute>} />
-                            <Route path="/authentication" element={<Auth />} />
+                            <Route path="/authentication" element={<Login />} />
                         </Routes>
                     </PageBody>
 

@@ -1,16 +1,17 @@
-import { useRef } from 'react';
+import { Dispatch, SetStateAction, useRef } from 'react';
 
 import { Container, Content, Inner, Loading } from './styled';
 
 type ToastProps = {
     text: string;
+    setToastText: Dispatch<SetStateAction<string>>;
 }
 
-export function Toast({ text }: ToastProps){
+export function Toast({ text, setToastText }: ToastProps){
     const toastRef = useRef<HTMLDivElement>(null)
 
     setTimeout(() => {
-        toastRef.current?.remove()
+        setToastText('')
     }, 3000)
 
     return(
@@ -22,7 +23,6 @@ export function Toast({ text }: ToastProps){
 
                 <Loading />
             </Inner>
-            
         </Container>
     )
 }
