@@ -7,6 +7,7 @@ import { PrivateRoute } from "./components/PrivateRoute"
 import { Login } from "./pages/Auth/login"
 import { HomeScreen } from './pages/HomeScreen'
 import { Orders } from "./pages/Orders"
+import { Profile } from "./pages/Profile"
 
 import { ThemeProvider } from 'styled-components'
 import { Container, Menu, PageBody } from "./styles/AppStyled"
@@ -33,7 +34,7 @@ function App(){
                         <Routes>
                             <Route path="/" element={<HomeScreen />} />
                             <Route path="/orders" element={<PrivateRoute><Orders /></PrivateRoute>} />
-                            <Route path="/profile" element={<PrivateRoute><HomeScreen /></PrivateRoute>} />
+                            <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
                             <Route path="/authentication" element={<Login />} />
                         </Routes>
                     </PageBody>

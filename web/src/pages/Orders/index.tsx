@@ -1,7 +1,7 @@
 import { useAuth } from "../../contexts/AuthContext"
 
 export function Orders(){
-    const { user, setUser, setTest } = useAuth()
+    const { user } = useAuth()
 
     console.log(user)
 
