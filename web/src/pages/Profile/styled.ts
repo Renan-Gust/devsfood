@@ -24,29 +24,54 @@ export const ProfileArea = styled.div`
             width: 68px;
         }
     }
+`;
 
-    div p.email{
-        margin-top: 8px;
+export const EditArea = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+
+    img{
+        cursor: pointer;
+        width: 16px;
+        height: auto;
+    }
+
+    input{
+        border: 0;
+        outline: none;
+        border-radius: 10px;
+        width: 260px;
+
+        height: 30px;
+        padding-left: 10px;
+
+        background-color: ${props => props.theme.colors.White};
+        font-size: 1rem;
     }
 `;
 
 export const UserArea = styled.div`
     width: 100%;
     margin-top: 24px;
-    padding: 20px;
-    background-color: ${props => props.theme.colors.LightGreen};
-    border-radius: 10px;
 
     display: flex;
     justify-content: between;
     gap: 32px;
 
+    .userAreaINner{
+        padding: 20px;
+        background-color: ${props => props.theme.colors.LightGreen};
+        border-radius: 10px;
+    }
+
     .changePassword{
         width: 25%;
     }
 
-    .address{
-        flex: 1;
+    .addressArea{
+        width: 75%;
     }
 
     p{
@@ -56,13 +81,13 @@ export const UserArea = styled.div`
 `;
 
 export const Group = styled.div`
-    display: flex;
-    gap: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0 16px;
 `;
 
 export const InputGroup = styled.div`
     margin-top: 16px;
-    margin-bottom: 24px;
 
     strong{
         display: block;

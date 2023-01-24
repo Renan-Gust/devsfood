@@ -16,7 +16,8 @@ class UserHelper
         if (count(array($data)) > 0) {
             return [
                 "user" => [
-                    "name" => $data['name']
+                    "name" => $data['name'],
+                    "email" => $data['email']
                 ]
             ];
         }
@@ -47,7 +48,8 @@ class UserHelper
                         "expiresAt" => 7
                     ],
                     "user" => [
-                        "name" => $user['name']
+                        "name" => $user['name'],
+                        "email" => $user['email']
                     ]
                 ];
             }
@@ -86,7 +88,8 @@ class UserHelper
                 "expiresAt" => 7
             ],
             "user" => [
-                "name" => $name
+                "name" => $name,
+                "email" => $email
             ]
         ];
     }
@@ -100,5 +103,29 @@ class UserHelper
             echo json_encode($result);
             exit;
         }
+    }
+
+    public static function updateUserInfo($name, $email)
+    {
+        $user = User::select()->where('email', $email)->one();
+
+        if ($user) {
+            $currentDay = date('Y-m-d H:i:s');
+
+            User::update([
+                "name" => $name,
+                "email" => $email,
+                "updated_at" => $currentDay
+            ])->where("email", $email)->execute();
+
+            return [
+                "user" => [
+                    "name" => $user['name'],
+                    "email" => $user['email']
+                ]
+            ];
+        }
+
+        return false;
     }
 }

@@ -1,69 +1,158 @@
-import { Container, Group, InputGroup, ProfileArea, UserArea } from "./styled"
+import { useEffect, useState } from "react"
+import { Toast } from "../../components/Toast"
+import { useAuth } from "../../contexts/AuthContext"
+import { api } from "../../services/api"
+import { Container, EditArea, Group, InputGroup, ProfileArea, UserArea } from "./styled"
 
+import editImage from '/assets/edit.png'
 import profileImage from '/assets/profile.png'
 
+let searchTimer: any = null
+
 export function Profile() {
+    const { user } = useAuth()
+
+    const [toastText, setToastText] = useState('')
+    const [editName, setEditName] = useState(false)
+    const [editEmail, setEditEmail] = useState(false)
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('renangustavo7429@gmail.com')
+
+    async function changeUserInfo() {
+        const result = await api.updateUserInfoRequest({ name, email })
+        if(result.status === "success"){
+            setName(result.data.user.name)
+            setName(result.data.user.email)
+        } else {
+            setToastText(result.message ? result.message : "Email e senha precisam ser preenchidos")
+            return
+        }
+    }
+
+    function handleEditUserInfo(info: "name" | "email") {
+        setEditName(false)
+        setEditEmail(false)
+
+        if(info === "name"){
+            setEditName(!editName)
+        } else {
+            setEditEmail(!editEmail)
+        }
+    }
+
+    useEffect(() => {
+        setName(user?.name!)
+        setEmail(user?.email!)
+    }, [])
+
+    useEffect(() => {
+        clearTimeout(searchTimer)
+
+        if(name && email){
+            searchTimer = setTimeout(() => {
+                if(name !== user?.name || email !== user?.email) {
+                    changeUserInfo()
+                }
+            }, 2000)
+        }
+    }, [name, email])
+
     return(
         <Container>
             <div className="userArea">
                 <ProfileArea>
                     <div className="imageArea">
-                        <img src={profileImage} alt="Renan Gustavo" />
+                        <img src={profileImage} alt={name} />
                     </div>
 
                     <div>
-                        <p>Renan Gustavo</p>
-                        <p className="email">renangustavo7429@gmail.com</p>
+                        <EditArea>
+                            {!editName
+                                ?
+                                <p>{name}</p>
+                                : 
+                                <input 
+                                    type="text"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                />
+                            }
+
+                            <img 
+                                src={editImage}
+                                alt="Ícone de um lápis para editar"
+                                onClick={() => handleEditUserInfo("name")}
+                            />
+                        </EditArea>
+                        <EditArea>
+                            {!editEmail
+                                ?
+                                <p className="email">{email}</p>
+                                :
+                                <input
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                            }
+                            <img
+                                src={editImage}
+                                alt="Ícone de um lápis para editar"
+                                onClick={() => handleEditUserInfo("email")}
+                            />
+                        </EditArea>
                     </div>
                 </ProfileArea>
 
                 <UserArea>
-                    <div className="changePassword">
+                    <div className="changePassword userAreaINner">
                         <p>Alterar senha</p>
 
                         <InputGroup>
                             <strong>Senhta atual</strong>
-                            <input type="password" />
+                            <input type="password" readOnly />
                         </InputGroup>
 
                         <InputGroup>
                             <strong>Nova Senha</strong>
-                            <input type="password" />
+                            <input type="password" readOnly />
                         </InputGroup>
                     </div>
 
-                    <div className="addressArea">
+                    <div className="addressArea userAreaINner">
                         <p>Endereço</p>
 
                         <Group>
                             <InputGroup>
                                 <strong>Endereço</strong>
-                                <input type="text" value="Rua santa luzia" />
+                                <input type="text" value="Rua santa luzia" readOnly />
                             </InputGroup>
 
                             <InputGroup>
                                 <strong>Número</strong>
-                                <input type="number" value="74" />
+                                <input type="number" value="74" readOnly />
                             </InputGroup>
 
                             <InputGroup>
                                 <strong>Bairro</strong>
-                                <input type="text" value="Inhaúma" />
+                                <input type="text" value="Inhaúma" readOnly />
                             </InputGroup>
 
                             <InputGroup>
                                 <strong>Cidade</strong>
-                                <input type="text" value="Rio de Janeiro" />
+                                <input type="text" value="Rio de Janeiro" readOnly />
                             </InputGroup>
 
                             <InputGroup>
                                 <strong>Estado</strong>
-                                <input type="text" value="Rio de Janeiro" />
+                                <input type="text" value="Rio de Janeiro" readOnly />
                             </InputGroup>
                         </Group>
                     </div>
                 </UserArea>
             </div>
+
+            {toastText && <Toast text={toastText} setToastText={setToastText} />}
         </Container>
     )
 }

@@ -88,10 +88,45 @@ class UserController extends Controller
 
         $data = json_decode(file_get_contents('php://input'), true);
 
-        $token = $data['token'];
+        $token = isset($data['token']) ? $data['token'] : null;
 
         if ($token) {
             $user = UserHelper::checkLogin($token);
+
+            if ($user) {
+                http_response_code(200);
+                $result["status"] = "success";
+                $result["data"] = $user;
+                echo json_encode($result);
+                exit;
+            } else {
+                http_response_code(404);
+                $result["status"] = "failed";
+                $result["message"] = "Usuário não encontrado";
+                echo json_encode($result);
+                exit;
+            }
+        } else {
+            http_response_code(404);
+            $result["status"] = "failed";
+            echo json_encode($result);
+            exit;
+        }
+    }
+
+    public function updateUserInfo()
+    {
+        $result = [];
+
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        $name = isset($data['name']) ? $data['name'] : null;
+        $email = isset($data['email']) ? $data['email'] : null;
+
+        UserHelper::validadeEmail($result, $email);
+
+        if ($name && $email) {
+            $user = UserHelper::updateUserInfo($name, $email);
 
             if ($user) {
                 http_response_code(200);

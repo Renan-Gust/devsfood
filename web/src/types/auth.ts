@@ -25,14 +25,26 @@ interface ResponseData {
             value: string;
             expiresAt: number;
         };
-        user: {
-            name: string;
-        }
+        user: userType;
+    }
+}
+
+export interface updateUserInfoRequestData {
+    name: string;
+    email: string;
+}
+
+export interface updateUserInfoResponseData {
+    status: string;
+    message?: string;
+    data: {
+        user: userType;
     }
 }
 
 export interface userType{
     name: string;
+    email: string;
 }
 
 export interface FormActiveType  {
