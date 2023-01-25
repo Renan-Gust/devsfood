@@ -66,44 +66,43 @@ export const UserArea = styled.div`
         border-radius: 10px;
     }
 
-    .changePassword{
-        width: 25%;
-    }
-
-    .addressArea{
-        width: 75%;
-    }
-
     p{
         font-size: 2rem;
         font-weight: bold;
     }
-`;
 
-export const Group = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 0 16px;
-`;
+    .inputGroup {
+        margin-top: 16px;
 
-export const InputGroup = styled.div`
-    margin-top: 16px;
+        strong{
+            display: block;
+            margin-bottom: 12px;
+        }
 
-    strong{
-        display: block;
-        margin-bottom: 12px;
+        input{
+            border: 0;
+            outline: none;
+            border-radius: 10px;
+            width: 100%;
+
+            height: 40px;
+            padding-left: 10px;
+
+            background-color: ${props => props.theme.colors.White};
+            font-size: 1rem;
+        }
     }
 
-    input{
-        border: 0;
-        outline: none;
-        border-radius: 10px;
-        width: 100%;
+    button{
+        box-shadow: 4px 5px 0px rgb(0 0 0 / 16%);
+        border-radius: 5px;
 
-        height: 40px;
-        padding-left: 10px;
+        margin-top: 16px;
+        padding: 8px 32px;
+        font-weight: 500;
+        font-size: 1.38rem;
 
-        background-color: ${props => props.theme.colors.White};
-        font-size: 1rem;
+        background-color: ${props => props.theme.colors.DarkGreen};
+        color: ${props => props.theme.colors.White};
     }
 `;

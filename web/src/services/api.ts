@@ -1,6 +1,9 @@
-import { checkLoginRequestData, checkLoginResponseData, signInRequestData, signInResponseData, signUpRequestData, updateUserInfoRequestData, updateUserInfoResponseData } from "../types/auth";
 import { Categories } from "../types/categories";
 import { Products } from "../types/products";
+import { ResponseData } from "../types/user";
+import { checkLoginRequestData, signInRequestData, signUpRequestData } from "../types/user/auth";
+import { changePasswordRequestData, changePasswordResponseData } from "../types/user/changePassword";
+import { updateUserInfoRequestData, updateUserInfoResponseData } from "../types/user/updateUserInfo";
 
 const baseURL = 'http://localhost/projetos/devsfood/server/public'
 // const baseURL = 'http://localhost/devsfood/server/public'
@@ -8,10 +11,11 @@ const baseURL = 'http://localhost/projetos/devsfood/server/public'
 interface ApiType {
     getCategories: () => Promise<Categories>;
     getProducts: (search: string, page: number, category: number) => Promise<Products>;
-    signInRequest: (data: signInRequestData) => Promise<signInResponseData>;
-    checkLogin: (data: checkLoginRequestData) => Promise<checkLoginResponseData>;
-    signUpRequest: (data: signUpRequestData) => Promise<signInResponseData>;
+    signInRequest: (data: signInRequestData) => Promise<ResponseData>;
+    checkLogin: (data: checkLoginRequestData) => Promise<ResponseData>;
+    signUpRequest: (data: signUpRequestData) => Promise<ResponseData>;
     updateUserInfoRequest: (data: updateUserInfoRequestData) => Promise<updateUserInfoResponseData>;
+    changePasswordRequest: (data: changePasswordRequestData) => Promise<changePasswordResponseData>;
 }
 
 interface FieldsType {
@@ -118,6 +122,24 @@ export const api: ApiType = {
     updateUserInfoRequest: async(data: updateUserInfoRequestData) => {
         try{
             const response = await fetch(`${baseURL}/user`, {
+                method: "PUT",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: JSON.stringify(data)
+            })
+
+            const json = await response.json()
+            return json
+        } catch (error) {
+            console.log(error)
+        }
+    },
+
+    changePasswordRequest: async(data: changePasswordRequestData) => {
+        try{
+            const response = await fetch(`${baseURL}/user/password`, {
                 method: "PUT",
                 headers: {
                     'Accept': 'application/json',

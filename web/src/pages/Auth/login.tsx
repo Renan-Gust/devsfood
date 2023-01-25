@@ -3,9 +3,10 @@ import { Navigate } from 'react-router-dom';
 
 import { Toast } from '../../components/Toast';
 import { useAuth } from '../../contexts/AuthContext';
-import { FormActiveType } from '../../types/auth';
-import { handleChangeForm } from '../../utils/auth';
 import { Register } from './register';
+
+import { FormActiveType } from '../../types/user';
+import { handleChangeForm } from '../../utils/auth';
 
 import { Container, LoginArea, SubmitButton } from './styled';
 

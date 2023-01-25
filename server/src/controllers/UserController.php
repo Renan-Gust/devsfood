@@ -161,4 +161,36 @@ class UserController extends Controller
             exit;
         }
     }
+
+    public function changePassword()
+    {
+        $result = [];
+
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        $id = isset($data['id']) ? $data['id'] : null;
+        $password = isset($data['password']) ? $data['password'] : null;
+        $newPassword = isset($data['newPassword']) ? $data['newPassword'] : null;
+
+        if ($id && $password && $newPassword) {
+            $user = UserHelper::changePassword($id, $password, $newPassword);
+
+            if ($user) {
+                http_response_code(200);
+                $result["status"] = "success";
+                $result["data"] = $user;
+                echo json_encode($result);
+                exit;
+            } else {
+                $result["status"] = "failed";
+                $result["message"] = "A senha não confere.";
+                echo json_encode($result);
+                exit;
+            }
+        } else {
+            $result["status"] = "failed";
+            echo json_encode($result);
+            exit;
+        }
+    }
 }

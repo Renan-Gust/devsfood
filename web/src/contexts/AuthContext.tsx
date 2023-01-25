@@ -2,14 +2,16 @@ import Cookies from "js-cookie";
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 
 import { api } from '../services/api';
-import { signInRequestData, signInResponseData, signUpRequestData, signUpResponseData, userType } from "../types/auth";
+
+import { ResponseData, userType } from "../types/user";
+import { signInRequestData, signUpRequestData } from "../types/user/auth";
 
 type AuthContextType = {
     isAuthenticated: boolean;
     user: userType | null;
     setUser: Dispatch<SetStateAction<userType | null>>;
-    signIn: (data: signInRequestData) => Promise<signInResponseData>;
-    signUp: (data: signUpRequestData) => Promise<signUpResponseData>;
+    signIn: (data: signInRequestData) => Promise<ResponseData>;
+    signUp: (data: signUpRequestData) => Promise<ResponseData>;
     loading: boolean;
     pathname: string;
     setPathname: Dispatch<SetStateAction<string>>;

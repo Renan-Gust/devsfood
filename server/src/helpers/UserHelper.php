@@ -132,4 +132,32 @@ class UserHelper
 
         return false;
     }
+
+    public static function changePassword($id, $password, $newPassword)
+    {
+        $user = User::select()->where('id', $id)->one();
+
+        if ($user) {
+            if (password_verify($password, $user['password'])) {
+                $currentDay = date('Y-m-d H:i:s');
+
+                $hash = password_hash($newPassword, PASSWORD_DEFAULT);
+
+                User::update([
+                    "password" => $hash,
+                    "updated_at" => $currentDay
+                ])->where("id", $id)->execute();
+
+                return [
+                    "user" => [
+                        "id" => $user['id'],
+                        "name" => $user['name'],
+                        "email" => $user['email']
+                    ]
+                ];
+            }
+        }
+
+        return false;
+    }
 }

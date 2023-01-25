@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react"
+
+import { AddressArea } from "../../components/AddressArea"
+import { ChangePassword } from "../../components/ChangePassword"
 import { Toast } from "../../components/Toast"
 import { useAuth } from "../../contexts/AuthContext"
+
 import { api } from "../../services/api"
-import { updateUserInfoRequestData } from "../../types/auth"
-import { Container, EditArea, Group, InputGroup, ProfileArea, UserArea } from "./styled"
+import { updateUserInfoRequestData } from "../../types/user/updateUserInfo"
+
+import { Container, EditArea, ProfileArea, UserArea } from "./styled"
 
 import editImage from '/assets/edit.png'
 import profileImage from '/assets/profile.png'
@@ -30,8 +35,6 @@ export function Profile() {
             data.email = email
         }
 
-        console.log(name, email, user?.email)
-
         const result = await api.updateUserInfoRequest(data)
         if(result.status === "success"){
             setUser(result.data.user)
@@ -44,7 +47,7 @@ export function Profile() {
 
             setToastText("Alteração feita com sucesso")
         } else {
-            setToastText(result.message ? result.message : "Email e senha precisam ser preenchidos")
+            setToastText(result.message ?? "Email e senha precisam ser preenchidos")
             return
         }
     }
@@ -125,50 +128,8 @@ export function Profile() {
                 </ProfileArea>
 
                 <UserArea>
-                    <div className="changePassword userAreaINner">
-                        <p>Alterar senha</p>
-
-                        <InputGroup>
-                            <strong>Senhta atual</strong>
-                            <input type="password" readOnly />
-                        </InputGroup>
-
-                        <InputGroup>
-                            <strong>Nova Senha</strong>
-                            <input type="password" readOnly />
-                        </InputGroup>
-                    </div>
-
-                    <div className="addressArea userAreaINner">
-                        <p>Endereço</p>
-
-                        <Group>
-                            <InputGroup>
-                                <strong>Endereço</strong>
-                                <input type="text" value="Rua santa luzia" readOnly />
-                            </InputGroup>
-
-                            <InputGroup>
-                                <strong>Número</strong>
-                                <input type="number" value="74" readOnly />
-                            </InputGroup>
-
-                            <InputGroup>
-                                <strong>Bairro</strong>
-                                <input type="text" value="Inhaúma" readOnly />
-                            </InputGroup>
-
-                            <InputGroup>
-                                <strong>Cidade</strong>
-                                <input type="text" value="Rio de Janeiro" readOnly />
-                            </InputGroup>
-
-                            <InputGroup>
-                                <strong>Estado</strong>
-                                <input type="text" value="Rio de Janeiro" readOnly />
-                            </InputGroup>
-                        </Group>
-                    </div>
+                    <ChangePassword setToastText={setToastText} />
+                    <AddressArea />
                 </UserArea>
             </div>
 
