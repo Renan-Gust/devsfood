@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 23, 2023 at 09:28 PM
+-- Generation Time: Jan 25, 2023 at 03:43 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -20,6 +20,22 @@ SET time_zone = "+00:00";
 --
 -- Database: `devsfood`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `addresses`
+--
+
+CREATE TABLE `addresses` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL,
+  `address` varchar(100) DEFAULT NULL,
+  `number` int(11) DEFAULT NULL,
+  `neighborhood` int(100) DEFAULT NULL,
+  `city` varchar(100) DEFAULT NULL,
+  `state` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -113,11 +129,22 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `token`, `token_expires_
 (1, 'Renan Gustavo', 'renangustavo7429@gmail.com', '$2y$10$CzAelH5fAnfOmomcDNHfZeCuBA1BuPOpNQlEuuJXqmfG1X4vIoeYi', '08d5a87cbad31e2d0f9a454cff05eec6', '2023-01-30', '2022-12-31 03:20:58', '2023-01-23 17:51:41'),
 (2, 'Renan Gustavo', 'renandevfullstack@gmail.com', '$2y$10$Ww6ntFV9QG9/4NXr6OG3XeVxkmWCRqbEai6a6.9pXuHSuluOiPi3i', '4b0f42dfaf63dc9ec6793f874e21e536', '2023-01-30', '2022-12-30 23:22:59', '2023-01-23 20:24:36'),
 (3, 'Renan Gostozo', 'renandevfullstac2k@gmail.com', '$2y$10$AbaoCTQTSfOam/SBhCPXHuvVklW.1g0bYApWvVk45/ilXStHRsMgu', 'd31972a9ebc55bb142d559f44de77fe3', '2023-01-30', '2023-01-23 20:25:59', '2023-01-23 20:25:59'),
-(4, 'Teste', 'teste@gmail.com', '$2y$10$jCKEF/Ox3h73zbehPh6gUOLnFKuT5lH8BPQIBWbKK7PTLrqyuhc0.', '8067073b0af91a5db4c23f4748751c5c', '2023-01-30', '2023-01-23 20:26:42', '2023-01-23 20:27:33');
+(4, 'Teste', 'teste@gmail.com', '$2y$10$NLDAnT1IuHG5G4l6ytjDP.0VKSNFMoQR5X1v0tUo6.pGL8eiqZjGy', '02c2091189617c3932d5d10fc9b9880c', '2023-02-01', '2023-01-23 20:26:42', '2023-01-25 14:37:30'),
+(5, 'Renan Gostozo2', 'renandevfullstaddc2k@gmail.com', '$2y$10$U.UqGLJhCrh95zkub7MBmesGGtttFyKqfMp02LpAGPBn.ovTFqZXa', '4361f4d4839441067b08c33fc67f5692', '2023-02-01', '2023-01-25 12:58:48', '2023-01-25 12:58:48'),
+(6, 'Gostozo2', 'renandevfullstaddc2kss@gmail.com', '$2y$10$QC7ogMYPJzNApdAMxDKwTOtyaci5OXn/6QT2SJACz7bRtIvzm2tsa', '40aa3db2d9184013b0dd6c12cfd4d616', '2023-02-01', '2023-01-25 13:04:27', '2023-01-25 13:04:27'),
+(7, 'Gostozo2', 'renandevfullstad22dc2kss@gmail.com', '$2y$10$qEBgzek2488MqFFhdPf0IOg3XUUskeSUIGMypvW448//Sk2MOvKWS', '01c69c734d27a3bfb0d035e833c19276', '2023-02-01', '2023-01-25 13:06:01', '2023-01-25 13:06:01'),
+(8, 'Gostozo2', 'renandevfullstad2222dc2kss@gmail.com', '$2y$10$Huduh/a1vn5.4lULbiArfuXZDeB/reI6RlK2PI3C.racRGYOK6Lc6', '972b634dd69e54e29915c1083203c6d1', '2023-02-01', '2023-01-25 13:08:02', '2023-01-25 13:08:02');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `addresses`
+--
+ALTER TABLE `addresses`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `categorys`
@@ -150,6 +177,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `addresses`
+--
+ALTER TABLE `addresses`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `categorys`
 --
 ALTER TABLE `categorys`
@@ -171,11 +204,17 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `addresses`
+--
+ALTER TABLE `addresses`
+  ADD CONSTRAINT `addresses_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `productcategorys`

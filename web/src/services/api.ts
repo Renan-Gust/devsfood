@@ -140,7 +140,7 @@ export const api: ApiType = {
     changePasswordRequest: async(data: changePasswordRequestData) => {
         try{
             const response = await fetch(`${baseURL}/user/password`, {
-                method: "PUT",
+                method: "PATCH",
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/x-www-form-urlencoded'
