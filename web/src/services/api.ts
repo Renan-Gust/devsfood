@@ -1,3 +1,4 @@
+import { AddressRequestData, AddressResponseData } from "../types/address";
 import { Categories } from "../types/categories";
 import { Products } from "../types/products";
 import { ResponseData } from "../types/user";
@@ -16,6 +17,8 @@ interface ApiType {
     signUpRequest: (data: signUpRequestData) => Promise<ResponseData>;
     updateUserInfoRequest: (data: updateUserInfoRequestData) => Promise<updateUserInfoResponseData>;
     changePasswordRequest: (data: changePasswordRequestData) => Promise<changePasswordResponseData>;
+    getAddressRequest: (userId: number) => Promise<AddressResponseData>;
+    addAddressRequest: (data: AddressRequestData) => Promise<AddressResponseData>;
 }
 
 interface FieldsType {
@@ -141,6 +144,35 @@ export const api: ApiType = {
         try{
             const response = await fetch(`${baseURL}/user/password`, {
                 method: "PATCH",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: JSON.stringify(data)
+            })
+
+            const json = await response.json()
+            return json
+        } catch (error) {
+            console.log(error)
+        }
+    },
+
+    getAddressRequest: async(userId: number) => {
+        try{
+            const response = await fetch(`${baseURL}/address/${userId}`)
+            const json = await response.json()
+    
+            return json
+        } catch (error) {
+            console.log(error)
+        }
+    },
+
+    addAddressRequest: async(data: AddressRequestData) => {
+        try{
+            const response = await fetch(`${baseURL}/address`, {
+                method: "POST",
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/x-www-form-urlencoded'

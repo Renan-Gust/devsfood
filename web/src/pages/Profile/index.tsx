@@ -129,7 +129,7 @@ export function Profile() {
 
                 <UserArea>
                     <ChangePassword setToastText={setToastText} />
-                    <AddressArea />
+                    <AddressArea setToastText={setToastText} />
                 </UserArea>
             </div>
 
