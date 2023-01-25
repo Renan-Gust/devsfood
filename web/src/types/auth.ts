@@ -30,8 +30,9 @@ interface ResponseData {
 }
 
 export interface updateUserInfoRequestData {
+    id: number;
     name: string;
-    email: string;
+    email?: string;
 }
 
 export interface updateUserInfoResponseData {
@@ -43,6 +44,7 @@ export interface updateUserInfoResponseData {
 }
 
 export interface userType{
+    id: number;
     name: string;
     email: string;
 }

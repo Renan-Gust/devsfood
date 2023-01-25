@@ -16,6 +16,7 @@ class UserHelper
         if (count(array($data)) > 0) {
             return [
                 "user" => [
+                    "id" => $data['id'],
                     "name" => $data['name'],
                     "email" => $data['email']
                 ]
@@ -48,6 +49,7 @@ class UserHelper
                         "expiresAt" => 7
                     ],
                     "user" => [
+                        "id" => $user['id'],
                         "name" => $user['name'],
                         "email" => $user['email']
                     ]
@@ -72,7 +74,7 @@ class UserHelper
 
         $currentDay = date('Y-m-d H:i:s');
 
-        User::insert([
+        $id = User::getLastInsertId()->table("users")->insert([
             "name" => $name,
             "email" => $email,
             "password" => $hash,
@@ -88,6 +90,7 @@ class UserHelper
                 "expiresAt" => 7
             ],
             "user" => [
+                "id" => $id,
                 "name" => $name,
                 "email" => $email
             ]
@@ -105,23 +108,24 @@ class UserHelper
         }
     }
 
-    public static function updateUserInfo($name, $email)
+    public static function updateUserInfo($id, $name, $email = '')
     {
-        $user = User::select()->where('email', $email)->one();
+        $user = User::select()->where('id', $id)->one();
 
         if ($user) {
             $currentDay = date('Y-m-d H:i:s');
 
             User::update([
                 "name" => $name,
-                "email" => $email,
+                "email" => $email ? $email : $user['email'],
                 "updated_at" => $currentDay
-            ])->where("email", $email)->execute();
+            ])->where("id", $id)->execute();
 
             return [
                 "user" => [
-                    "name" => $user['name'],
-                    "email" => $user['email']
+                    "id" => $id,
+                    "name" => $name,
+                    "email" => $email ? $email : $user['email'],
                 ]
             ];
         }

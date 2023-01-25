@@ -5,10 +5,6 @@ namespace src\controllers;
 use core\Controller;
 use src\helpers\UserHelper;
 
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: *');
-header('Content-Type: application/x-www-form-urlencoded');
-
 class UserController extends Controller
 {
     public function signIn()
@@ -120,13 +116,30 @@ class UserController extends Controller
 
         $data = json_decode(file_get_contents('php://input'), true);
 
+        $id = isset($data['id']) ? $data['id'] : null;
         $name = isset($data['name']) ? $data['name'] : null;
         $email = isset($data['email']) ? $data['email'] : null;
 
-        UserHelper::validadeEmail($result, $email);
+        if ($email) {
+            UserHelper::validadeEmail($result, $email);
+        }
 
-        if ($name && $email) {
-            $user = UserHelper::updateUserInfo($name, $email);
+        if ($id && $name || $id && $email || $id && $name && $email) {
+            $user = null;
+
+            if ($email) {
+                if (UserHelper::emailExists($email)) {
+                    http_response_code(401);
+                    $result["status"] = "failed";
+                    $result["message"] = "E-mail já existe.";
+                    echo json_encode($result);
+                    exit;
+                }
+
+                $user = UserHelper::updateUserInfo($id, $name, $email);
+            }
+
+            $user = UserHelper::updateUserInfo($id, $name);
 
             if ($user) {
                 http_response_code(200);

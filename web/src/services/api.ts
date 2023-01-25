@@ -2,8 +2,8 @@ import { checkLoginRequestData, checkLoginResponseData, signInRequestData, signI
 import { Categories } from "../types/categories";
 import { Products } from "../types/products";
 
-// const baseURL = 'http://localhost/projetos/devsfood/server/public'
-const baseURL = 'http://localhost/devsfood/server/public'
+const baseURL = 'http://localhost/projetos/devsfood/server/public'
+// const baseURL = 'http://localhost/devsfood/server/public'
 
 interface ApiType {
     getCategories: () => Promise<Categories>;

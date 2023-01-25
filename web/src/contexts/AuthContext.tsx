@@ -7,6 +7,7 @@ import { signInRequestData, signInResponseData, signUpRequestData, signUpRespons
 type AuthContextType = {
     isAuthenticated: boolean;
     user: userType | null;
+    setUser: Dispatch<SetStateAction<userType | null>>;
     signIn: (data: signInRequestData) => Promise<signInResponseData>;
     signUp: (data: signUpRequestData) => Promise<signUpResponseData>;
     loading: boolean;
@@ -73,7 +74,7 @@ export const AuthContextProvider: React.FC<{children: React.ReactNode}> = ({ chi
     const isAuthenticated = !!user
 
     return(
-        <Context.Provider value={{ isAuthenticated, user, signIn, signUp, loading, pathname, setPathname }}>
+        <Context.Provider value={{ isAuthenticated, user, setUser, signIn, signUp, loading, pathname, setPathname }}>
             {children}
         </Context.Provider>
     )

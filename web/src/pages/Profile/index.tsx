@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { Toast } from "../../components/Toast"
 import { useAuth } from "../../contexts/AuthContext"
 import { api } from "../../services/api"
+import { updateUserInfoRequestData } from "../../types/auth"
 import { Container, EditArea, Group, InputGroup, ProfileArea, UserArea } from "./styled"
 
 import editImage from '/assets/edit.png'
@@ -10,19 +11,38 @@ import profileImage from '/assets/profile.png'
 let searchTimer: any = null
 
 export function Profile() {
-    const { user } = useAuth()
+    const { user, setUser } = useAuth()
+    const id = user?.id!
 
     const [toastText, setToastText] = useState('')
     const [editName, setEditName] = useState(false)
     const [editEmail, setEditEmail] = useState(false)
     const [name, setName] = useState('')
-    const [email, setEmail] = useState('renangustavo7429@gmail.com')
+    const [email, setEmail] = useState('')
 
     async function changeUserInfo() {
-        const result = await api.updateUserInfoRequest({ name, email })
+        const data: updateUserInfoRequestData = {
+            id,
+            name,
+        }
+
+        if(email !== user?.email){
+            data.email = email
+        }
+
+        console.log(name, email, user?.email)
+
+        const result = await api.updateUserInfoRequest(data)
         if(result.status === "success"){
+            setUser(result.data.user)
+
             setName(result.data.user.name)
-            setName(result.data.user.email)
+            setEmail(result.data.user.email)
+
+            setEditName(false)
+            setEditEmail(false)
+
+            setToastText("Alteração feita com sucesso")
         } else {
             setToastText(result.message ? result.message : "Email e senha precisam ser preenchidos")
             return
