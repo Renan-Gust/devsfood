@@ -10,25 +10,21 @@ type ChangePasswordProps = {
 }
 
 export function AddressArea({ setToastText }: ChangePasswordProps) {
-    const { address, setAddress, loading, setLoading } = useAddress()
+    const { address, setAddress } = useAddress()
     const { user } = useAuth()
 
     const [street, setStreet] = useState('')
-    const [number, setNumber] = useState<string | null>(null)
+    const [number, setNumber] = useState('')
     const [neighborhood, setNeighborhood] = useState('')
     const [city, setCity] = useState('')
     const [state, setState] = useState('')
 
     useEffect(() => {
-        (async () => {
-            const response = await api.getAddressRequest(user?.id!)
-    
-            if(response.status === 'success'){
-                setAddress(response.data)
-            }
-        })()
-
-        setLoading(false)
+        setStreet(address?.address ?? '')
+        setNumber(address?.number ?? '')
+        setNeighborhood(address?.neighborhood ?? '')
+        setCity(address?.city ?? '')
+        setState(address?.state ?? '')
     }, [])
 
     async function handleAddAddress(event: FormEvent){
@@ -38,7 +34,7 @@ export function AddressArea({ setToastText }: ChangePasswordProps) {
             const data = {
                 userId: user?.id.toString()!,
                 address: street,
-                number: number.toString(),
+                number: number,
                 neighborhood,
                 city,
                 state
@@ -47,7 +43,6 @@ export function AddressArea({ setToastText }: ChangePasswordProps) {
             const response = await api.addAddressRequest(data)
             if(response.status === 'success'){
                 setAddress(response.data)
-
                 setToastText("Alteração feita com sucesso")
             } else {
                 setToastText(response.message ?? 'Ocorreu algum erro!')
@@ -59,8 +54,26 @@ export function AddressArea({ setToastText }: ChangePasswordProps) {
         }
     }
 
-    function handleUpdateAddress(event: FormEvent){
+    async function handleUpdateAddress(event: FormEvent){
         event.preventDefault()
+
+        const data = {
+            userId: user?.id.toString()!,
+            address: street,
+            number: number,
+            neighborhood,
+            city,
+            state
+        }
+
+        const response = await api.updateAddressRequest(data)
+        if(response.status === 'success'){
+            setAddress(response.data)
+            setToastText("Alteração feita com sucesso")
+        } else {
+            setToastText(response.message ?? 'Ocorreu algum erro!')
+            return
+        }
     }
 
     return(
@@ -73,7 +86,7 @@ export function AddressArea({ setToastText }: ChangePasswordProps) {
                         <strong>Endereço</strong>
                         <input 
                             type="text"
-                            value={!loading ? address?.address : ''}
+                            value={street}
                             onChange={(e) => setStreet(e.target.value)}
                         />
                     </div>
@@ -82,7 +95,7 @@ export function AddressArea({ setToastText }: ChangePasswordProps) {
                         <strong>Número</strong>
                         <input 
                             type="number"
-                            value={!loading ? Number(address?.number) : ''}
+                            value={number}
                             onChange={(e) => setNumber(e.target.value)}
                         />
                     </div>
@@ -91,7 +104,7 @@ export function AddressArea({ setToastText }: ChangePasswordProps) {
                         <strong>Bairro</strong>
                         <input 
                             type="text"
-                            value={!loading ? address?.neighborhood : ''}
+                            value={neighborhood}
                             onChange={(e) => setNeighborhood(e.target.value)}
                         />
                     </div>
@@ -100,7 +113,7 @@ export function AddressArea({ setToastText }: ChangePasswordProps) {
                         <strong>Cidade</strong>
                         <input
                             type="text"
-                            value={!loading ? address?.city : ''}
+                            value={city}
                             onChange={(e) => setCity(e.target.value)}
                         />
                     </div>
@@ -109,7 +122,7 @@ export function AddressArea({ setToastText }: ChangePasswordProps) {
                         <strong>Estado</strong>
                         <input
                             type="text"
-                            value={!loading ? address?.state : ''}
+                            value={state}
                             onChange={(e) => setState(e.target.value)}
                         />
                     </div>

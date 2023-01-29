@@ -7,12 +7,12 @@ import { CartContextProvider } from './contexts/CartContext'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   // <React.StrictMode>
+  <AddressContextProvider>
     <AuthContextProvider>
       <CartContextProvider>
-        <AddressContextProvider>
-          <App />
-        </AddressContextProvider>
+        <App />
       </CartContextProvider>
     </AuthContextProvider>
+    </AddressContextProvider>
   // {/* </React.StrictMode> */}
 )

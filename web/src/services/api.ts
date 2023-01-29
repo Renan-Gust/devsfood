@@ -19,6 +19,7 @@ interface ApiType {
     changePasswordRequest: (data: changePasswordRequestData) => Promise<changePasswordResponseData>;
     getAddressRequest: (userId: number) => Promise<AddressResponseData>;
     addAddressRequest: (data: AddressRequestData) => Promise<AddressResponseData>;
+    updateAddressRequest: (data: AddressRequestData) => Promise<AddressResponseData>;
 }
 
 interface FieldsType {
@@ -173,6 +174,24 @@ export const api: ApiType = {
         try{
             const response = await fetch(`${baseURL}/address`, {
                 method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: JSON.stringify(data)
+            })
+
+            const json = await response.json()
+            return json
+        } catch (error) {
+            console.log(error)
+        }
+    },
+
+    updateAddressRequest: async(data: AddressRequestData) => {
+        try{
+            const response = await fetch(`${baseURL}/address`, {
+                method: "PUT",
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/x-www-form-urlencoded'

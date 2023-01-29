@@ -107,7 +107,15 @@ export const Address = styled.div`
     }
 `;
 
-export const EditAddress = styled.div`
+export const EditAddress = styled.div<{ createAddress?: boolean; }>`
+    width: ${props => props.createAddress ? '100%' : 'initial'};
+
+    a.createAddress{
+        width: 100%;
+        display: inline-block;
+        text-align: center;
+    }
+
     img{
         cursor: pointer;
         width: 22px;

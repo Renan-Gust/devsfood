@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useAddress } from '../../contexts/AddressContext'
 import { useCart } from '../../contexts/CartContext'
 
 import { Address, AddressArea, CartArea, CartBody, CartHeader, CartIcon, CartText, CouponArea, DeliveryArea, EditAddress, FinishOrderButton, OrderArea, ProductInfoArea, ProductItem, ProductQuantityArea, ProductsArea } from './styled'
@@ -11,6 +13,7 @@ import plus from '/assets/plus.png'
 
 export function Cart() {
     const {state, dispatch} = useCart()
+    const {address} = useAddress()
 
     const [show, setShow] = useState<boolean>(false)
 
@@ -69,16 +72,28 @@ export function Cart() {
                 <DeliveryArea>
                     <strong>Entrega</strong>
                     <AddressArea>
-                        <Address>
-                            <p>Rua Santa luzia, 74</p>
-                            <p>Bairro: Inhaúma</p>
-                            <p>Cidade: Rio de Janeiro</p>
-                            <p>Estado: Rio de Janeiro</p>
-                        </Address>
+                        {address ?
+                            <>
+                                <Address>
+                                    <p>{address.address}, {address.number}</p>
+                                    <p>Bairro: {address.neighborhood}</p>
+                                    <p>Cidade: {address.city}</p>
+                                    <p>Estado: {address.state}</p>
+                                </Address>
 
-                        <EditAddress>
-                            <img src={edit} alt="Ícone de um lápis para editar" />
-                        </EditAddress>
+                                <EditAddress>
+                                    <Link to="/profile">
+                                        <img src={edit} alt="Ícone de um lápis para editar" />
+                                    </Link>
+                                </EditAddress>
+                            </>
+                        :
+                            <EditAddress createAddress={true}>
+                                <Link to="/profile" className="createAddress">
+                                    Cadastrar um endereço
+                                </Link>
+                            </EditAddress>
+                        }
                     </AddressArea>
                 </DeliveryArea>
 

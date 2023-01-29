@@ -5,6 +5,7 @@ import { api } from '../services/api';
 
 import { ResponseData, userType } from "../types/user";
 import { signInRequestData, signUpRequestData } from "../types/user/auth";
+import { useAddress } from "./AddressContext";
 
 type AuthContextType = {
     isAuthenticated: boolean;
@@ -20,6 +21,7 @@ type AuthContextType = {
 export const Context = createContext({} as AuthContextType)
 
 export const AuthContextProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
+    const { address, setAddress } = useAddress()
     const [user, setUser] = useState<AuthContextType['user']>(null)
     const [loading, setLoading] = useState(true)
     const [pathname, setPathname] = useState('')
@@ -34,10 +36,16 @@ export const AuthContextProvider: React.FC<{children: React.ReactNode}> = ({ chi
                 if(response.status === 'success'){
                     setUser(response.data.user)
                 }
+
+                const addressResponse = await api.getAddressRequest(response.data.user.id)
+    
+                if(addressResponse.status === 'success'){
+                    setAddress(addressResponse.data)
+                }
+
+                setLoading(false)
             }
         })()
-
-        setLoading(false)
     }, [])
 
     async function signIn({ email, password }: signInRequestData){

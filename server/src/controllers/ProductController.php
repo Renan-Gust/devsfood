@@ -6,10 +6,6 @@ use core\Controller;
 use src\models\Product;
 use src\models\ProductCategory;
 
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: *');
-header('Content-Type: application/json');
-
 class ProductController extends Controller
 {
     public function getProducts()
