@@ -42,9 +42,9 @@ export const AuthContextProvider: React.FC<{children: React.ReactNode}> = ({ chi
                 if(addressResponse.status === 'success'){
                     setAddress(addressResponse.data)
                 }
-
-                setLoading(false)
             }
+
+            setLoading(false)
         })()
     }, [])
 
