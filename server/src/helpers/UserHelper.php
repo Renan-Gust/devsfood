@@ -74,7 +74,7 @@ class UserHelper
 
         $currentDay = date('Y-m-d H:i:s');
 
-        $id = User::getLastInsertId()->table("users")->insert([
+        $id = GetLastInsertId::getLastInsertId()->table("users")->insert([
             "name" => $name,
             "email" => $email,
             "password" => $hash,

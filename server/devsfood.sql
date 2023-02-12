@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 25, 2023 at 03:43 PM
+-- Generation Time: Feb 12, 2023 at 02:18 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -28,14 +28,23 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `addresses` (
-  `id` int(11) NOT NULL,
+  `id` int(11) UNSIGNED NOT NULL,
   `user_id` int(11) UNSIGNED NOT NULL,
   `address` varchar(100) DEFAULT NULL,
   `number` int(11) DEFAULT NULL,
-  `neighborhood` int(100) DEFAULT NULL,
+  `neighborhood` varchar(100) DEFAULT NULL,
   `city` varchar(100) DEFAULT NULL,
-  `state` varchar(100) DEFAULT NULL
+  `state` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `addresses`
+--
+
+INSERT INTO `addresses` (`id`, `user_id`, `address`, `number`, `neighborhood`, `city`, `state`, `created_at`, `updated_at`) VALUES
+(1, 4, 'Rua Santa Luzia', 74, 'Inhaúma', 'Rio de Janeiro', 'RJ', '2023-01-29 18:38:59', '2023-01-29 19:58:45');
 
 -- --------------------------------------------------------
 
@@ -57,6 +66,50 @@ INSERT INTO `categorys` (`id`, `name`, `image`) VALUES
 (1, 'Tortas', 'https://api.b7web.com.br/devsfood/media/categories/pie.png'),
 (2, 'Donuts', 'https://api.b7web.com.br/devsfood/media/categories/donut.png'),
 (3, 'Cookies', 'https://api.b7web.com.br/devsfood/media/categories/cookies.png');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orderproducts`
+--
+
+CREATE TABLE `orderproducts` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `order_id` int(11) UNSIGNED NOT NULL,
+  `product_id` int(11) UNSIGNED NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `orderproducts`
+--
+
+INSERT INTO `orderproducts` (`id`, `order_id`, `product_id`, `created_at`) VALUES
+(1, 1, 1, '2023-02-12 00:54:44'),
+(2, 1, 2, '2023-02-12 00:54:44');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
+CREATE TABLE `orders` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL,
+  `address_id` int(11) UNSIGNED DEFAULT NULL,
+  `total` decimal(10,2) NOT NULL,
+  `delivery_fee` decimal(10,2) NOT NULL,
+  `status` varchar(40) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `user_id`, `address_id`, `total`, `delivery_fee`, `status`, `created_at`) VALUES
+(1, 4, 1, '124.31', '7.99', 'received', '2023-02-12 04:54:44');
 
 -- --------------------------------------------------------
 
@@ -127,7 +180,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `token`, `token_expires_at`, `created_at`, `updated_at`) VALUES
 (1, 'Renan Gustavo', 'renangustavo7429@gmail.com', '$2y$10$CzAelH5fAnfOmomcDNHfZeCuBA1BuPOpNQlEuuJXqmfG1X4vIoeYi', '08d5a87cbad31e2d0f9a454cff05eec6', '2023-01-30', '2022-12-31 03:20:58', '2023-01-23 17:51:41'),
-(2, 'Renan Gustavo', 'renandevfullstack@gmail.com', '$2y$10$Ww6ntFV9QG9/4NXr6OG3XeVxkmWCRqbEai6a6.9pXuHSuluOiPi3i', '4b0f42dfaf63dc9ec6793f874e21e536', '2023-01-30', '2022-12-30 23:22:59', '2023-01-23 20:24:36'),
+(2, 'Renan Gustavo', 'renandevfullstack@gmail.com', '$2y$10$Ww6ntFV9QG9/4NXr6OG3XeVxkmWCRqbEai6a6.9pXuHSuluOiPi3i', '50463e396d69ded7b62b591a3dc227a1', '2023-02-12', '2022-12-30 23:22:59', '2023-02-05 10:13:59'),
 (3, 'Renan Gostozo', 'renandevfullstac2k@gmail.com', '$2y$10$AbaoCTQTSfOam/SBhCPXHuvVklW.1g0bYApWvVk45/ilXStHRsMgu', 'd31972a9ebc55bb142d559f44de77fe3', '2023-01-30', '2023-01-23 20:25:59', '2023-01-23 20:25:59'),
 (4, 'Teste', 'teste@gmail.com', '$2y$10$NLDAnT1IuHG5G4l6ytjDP.0VKSNFMoQR5X1v0tUo6.pGL8eiqZjGy', '02c2091189617c3932d5d10fc9b9880c', '2023-02-01', '2023-01-23 20:26:42', '2023-01-25 14:37:30'),
 (5, 'Renan Gostozo2', 'renandevfullstaddc2k@gmail.com', '$2y$10$U.UqGLJhCrh95zkub7MBmesGGtttFyKqfMp02LpAGPBn.ovTFqZXa', '4361f4d4839441067b08c33fc67f5692', '2023-02-01', '2023-01-25 12:58:48', '2023-01-25 12:58:48'),
@@ -151,6 +204,22 @@ ALTER TABLE `addresses`
 --
 ALTER TABLE `categorys`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `orderproducts`
+--
+ALTER TABLE `orderproducts`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_id` (`order_id`),
+  ADD KEY `product_id` (`product_id`);
+
+--
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `address_id` (`address_id`);
 
 --
 -- Indexes for table `productcategorys`
@@ -180,13 +249,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `categorys`
 --
 ALTER TABLE `categorys`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `orderproducts`
+--
+ALTER TABLE `orderproducts`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `productcategorys`
@@ -215,6 +296,20 @@ ALTER TABLE `users`
 --
 ALTER TABLE `addresses`
   ADD CONSTRAINT `addresses_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `orderproducts`
+--
+ALTER TABLE `orderproducts`
+  ADD CONSTRAINT `orderproducts_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `orderproducts_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `orders`
+--
+ALTER TABLE `orders`
+  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `productcategorys`

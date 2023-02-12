@@ -4,11 +4,6 @@ namespace src\controllers;
 
 use core\Controller;
 use src\models\Addresse;
-use src\models\Category;
-
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: *');
-header('Content-Type: application/json');
 
 class AddressController extends Controller
 {
@@ -32,7 +27,7 @@ class AddressController extends Controller
             echo json_encode($result);
             exit;
         } else {
-            http_response_code(404);
+            http_response_code(200);
             $result['status'] = "failed";
             $result['message'] = "Endereço não encontrado";
 
