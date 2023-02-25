@@ -1,12 +1,31 @@
+import { useEffect, useState } from "react"
+
 import { OrderInProgress } from "../../components/OrderInProgress"
 import { useAuth } from "../../contexts/AuthContext"
+import { api } from "../../services/api"
+import { GetCompletedOrdersResponseData } from "../../types/orders/getCompletedOrders"
 
 import { Container, OtherOrders, Order, OrdersArea } from "./styled"
 
 export function Orders(){
     const { user } = useAuth()
 
+    const [completedOrders, setCompletedOrders] = useState<GetCompletedOrdersResponseData['data']>([])
+
     console.log(user)
+
+    useEffect(() => {
+        async function getCompletedOrders(){
+            const response = await api.getCompletedOrders(user?.id!)
+            if(response.status === "success"){
+                setCompletedOrders(response.data)
+            }
+        }
+        
+        getCompletedOrders()
+
+        // console.log(completedOrders)
+    }, [])
 
     return(
         <Container>
@@ -16,90 +35,50 @@ export function Orders(){
                 <h2>Outros pedidos</h2>
 
                 <OrdersArea>
-                    <Order>
-                        <div className="top">
-                            <p className="date">20/01/2023</p>
-                            <p className="status">Entregue</p>
-                        </div>
+                    { completedOrders.length > 0 && completedOrders.map((order, index) => {
+                        console.log(order.length)
 
-                        <div className="middle">
-                            <div className="address">
-                                <p>Minha casa</p>
-                                <p>Rua santa luzia, 74</p>
-                                <p>Rio de Janeiro, RJ</p>
-                            </div>
+                        let data = []
 
-                            <p className="total">R$ 124.31</p>
-                        </div>
-                    </Order>
+                        if(order.length >= 2){
+                            let total = 0
 
-                    <Order>
-                        <div className="top">
-                            <p className="date">20/01/2023</p>
-                            <p className="status">Entregue</p>
-                        </div>
+                            order.map((item) => {
+                                total += item.total
+                            })
 
-                        <div className="middle">
-                            <div className="address">
-                                <p>Minha casa</p>
-                                <p>Rua santa luzia, 74</p>
-                                <p>Rio de Janeiro, RJ</p>
-                            </div>
+                            data.push({
+                                total
+                            })
+                        } else {
+                            data.push({
+                                total: order.total
+                            })
+                        }
 
-                            <p className="total">R$ 124.31</p>
-                        </div>
-                    </Order>
+                        data.map((item) => {
+                            console.log(item)
 
-                    <Order>
-                        <div className="top">
-                            <p className="date">20/01/2023</p>
-                            <p className="status">Entregue</p>
-                        </div>
+                            return(
+                                <Order key={index}>
+                                    <div className="top">
+                                        <p className="date">25/02/203</p>
+                                        <p className="status">Entregue</p>
+                                    </div>
 
-                        <div className="middle">
-                            <div className="address">
-                                <p>Minha casa</p>
-                                <p>Rua santa luzia, 74</p>
-                                <p>Rio de Janeiro, RJ</p>
-                            </div>
+                                    <div className="middle">
+                                        <div className="address">
+                                            <p>Minha casa</p>
+                                            <p>Rua santa luzia, 74</p>
+                                            <p>Rio de Janeiro, RJ</p>
+                                        </div>
 
-                            <p className="total">R$ 124.31</p>
-                        </div>
-                    </Order>
-
-                    <Order>
-                        <div className="top">
-                            <p className="date">20/01/2023</p>
-                            <p className="status">Entregue</p>
-                        </div>
-
-                        <div className="middle">
-                            <div className="address">
-                                <p>Minha casa</p>
-                                <p>Rua santa luzia, 74</p>
-                                <p>Rio de Janeiro, RJ</p>
-                            </div>
-
-                            <p className="total">R$ 124.31</p>
-                        </div>
-                    </Order>
-
-                    <Order>
-                        <div className="top">
-                            <p className="date">20/01/2023</p>
-                            <p className="status">Entregue</p>
-                        </div>
-
-                        <div className="middle">
-                            <div className="address">
-                                <p>Minha casa</p>
-                                <p>Rua santa luzia, 74</p>
-                                <p>Rio de Janeiro, RJ</p>
-                            </div>
-
-                            <p className="total">R$ 124.31</p>
-                        </div>
-                    </Order>
+                                        <p className="total">R$ {item.total}</p>
+                                    </div>
+                                </Order>
+                            )
+                        })
+                    }) }
                 </OrdersArea>
             </OtherOrders>
         </Container>

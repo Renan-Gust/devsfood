@@ -56,8 +56,8 @@ class OrderController extends Controller
             $result['status'] = 'success';
             $result['data'] = [
                 "order" => [
-                    "orderStatus" => "received",
-                    "orderDate" => $currentDay,
+                    "status" => "received",
+                    "created_at" => $currentDay,
                     "total" => $total,
                     "deliveryFee" => $deliveryFee,
                 ],
@@ -94,36 +94,32 @@ class OrderController extends Controller
             'orders.delivery_fee'
         ];
 
-        $orders = OrderProduct::select($infos)
-            ->where("order_id", 1)
-            ->join('products', 'orderproducts.product_id', '=', 'products.id')
-            ->join('orders', 'orderproducts.order_id', '=', 'orders.id')
+        $orders = Order::select()
+            ->where("user_id", $userId)
+            ->where("status", "delivered")
             ->get();
-
-        print_r($orders);
-        exit;
 
         if ($orders) {
             $data = [];
 
             foreach ($orders as $order) {
+                $data[] = OrderProduct::select($infos)
+                    ->where("order_id", $order['id'])
+                    ->join('products', 'orderproducts.product_id', '=', 'products.id')
+                    ->join('orders', 'orderproducts.order_id', '=', 'orders.id')
+                    ->get();
             }
 
             http_response_code(200);
             $result['status'] = "success";
-            $result['data'] = [
-                "orderDate" => "",
-                "orderStatus" => "",
-                "total" => "124.31",
-                "address" => []
-            ];
+            $result['data'] = $data;
 
             echo json_encode($result);
             exit;
         } else {
             http_response_code(200);
             $result['status'] = "failed";
-            $result['message'] = "Nenhum pedido feito!";
+            $result['message'] = "Nenhum pedido entregue!";
 
             echo json_encode($result);
             exit;

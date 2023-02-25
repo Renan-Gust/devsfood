@@ -1,5 +1,7 @@
 import { AddressRequestData, AddressResponseData } from "../types/address";
 import { Categories } from "../types/categories";
+import { OrderRequestData, OrderResponseData } from "../types/orders/doOrder";
+import { GetCompletedOrdersResponseData } from "../types/orders/getCompletedOrders";
 import { Products } from "../types/products";
 import { ResponseData } from "../types/user";
 import { checkLoginRequestData, signInRequestData, signUpRequestData } from "../types/user/auth";
@@ -20,6 +22,8 @@ interface ApiType {
     getAddressRequest: (userId: number) => Promise<AddressResponseData>;
     addAddressRequest: (data: AddressRequestData) => Promise<AddressResponseData>;
     updateAddressRequest: (data: AddressRequestData) => Promise<AddressResponseData>;
+    doOrder: (data: OrderRequestData) => Promise<OrderResponseData>;
+    getCompletedOrders: (userId: number) => Promise<GetCompletedOrdersResponseData>;
 }
 
 interface FieldsType {
@@ -204,5 +208,34 @@ export const api: ApiType = {
         } catch (error) {
             console.log(error)
         }
-    }
+    },
+
+    doOrder: async(data: OrderRequestData) => {
+        try{
+            const response = await fetch(`${baseURL}/order`, {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: JSON.stringify(data)
+            })
+
+            const json = await response.json()
+            return json
+        } catch (error) {
+            console.log(error)
+        }
+    },
+
+    getCompletedOrders: async(userId: number) => {
+        try{
+            const response = await fetch(`${baseURL}/orders/user/${userId}`)
+            const json = await response.json()
+    
+            return json
+        } catch (error) {
+            console.log(error)
+        }
+    },
 }
