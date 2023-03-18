@@ -6,7 +6,6 @@ use core\Controller;
 use src\helpers\GetLastInsertId;
 use src\models\Addresse;
 use src\models\Order;
-use src\models\OrderProduct;
 use src\models\Product;
 
 class OrderController extends Controller
@@ -34,42 +33,30 @@ class OrderController extends Controller
 
         $products = [];
 
+        foreach ($productsId as $value) {
+            $product = Product::select()->where("id", $value)->one();
+
+            $products[] = [
+                "id" => $product['id'],
+                "name" => $product['name'],
+                "price" => $product['price'],
+                "image" => $product['image'],
+                "ingredients" => $product['ingredients']
+            ];
+        }
+
         if ($userId && $total && $deliveryFee && $productsId) {
             $id = GetLastInsertId::getLastInsertId()->table("orders")->insert([
                 "user_id" => $userId,
                 "address_id" => $getAddress['id'],
                 "total" => (float)$total,
                 "delivery_fee" => (float)$deliveryFee,
+                "products" => json_encode($products),
                 "status" => "received",
                 "created_at" => $currentDay,
             ])->execute();
 
-            foreach ($productsId as $value) {
-                $products[] = Product::select()->where("id", $value)->get();
-
-                OrderProduct::insert([
-                    "order_id" => $id,
-                    "product_id" => $value
-                ])->execute();
-            }
-
             $result['status'] = 'success';
-            $result['data'] = [
-                "order" => [
-                    "status" => "received",
-                    "created_at" => $currentDay,
-                    "total" => $total,
-                    "deliveryFee" => $deliveryFee,
-                ],
-                "address" => [
-                    "address" => $getAddress['address'],
-                    "number" => $getAddress['number'],
-                    "neighborhood" => $getAddress['neighborhood'],
-                    "city" => $getAddress['city'],
-                    "state" => $getAddress['state'],
-                ],
-                "products" => $products
-            ];
 
             echo json_encode($result);
             exit;
@@ -84,16 +71,6 @@ class OrderController extends Controller
     {
         $result = [];
 
-        $infos = [
-            'products.name',
-            'products.image',
-            'products.price',
-            'orders.created_at',
-            'orders.status',
-            'orders.total',
-            'orders.delivery_fee'
-        ];
-
         $orders = Order::select()
             ->where("user_id", $userId)
             ->where("status", "delivered")
@@ -102,12 +79,39 @@ class OrderController extends Controller
         if ($orders) {
             $data = [];
 
+            $infos = [
+                'addresses.address',
+                'addresses.number',
+                'addresses.neighborhood',
+                'addresses.city',
+                'addresses.state',
+                'orders.total',
+                'orders.delivery_fee',
+                'orders.products',
+                'orders.created_at',
+                'orders.status'
+            ];
+
             foreach ($orders as $order) {
-                $data[] = OrderProduct::select($infos)
-                    ->where("order_id", $order['id'])
-                    ->join('products', 'orderproducts.product_id', '=', 'products.id')
-                    ->join('orders', 'orderproducts.order_id', '=', 'orders.id')
-                    ->get();
+                $orderReturned = Addresse::select($infos)
+                    ->where('orders.id', $order['id'])
+                    ->join('orders', 'addresses.id', '=', 'orders.address_id')
+                    ->one();
+
+                $data[] = [
+                    "address" => [
+                        "address" => $orderReturned['address'],
+                        "number"  => $orderReturned['number'],
+                        "neighborhood"  => $orderReturned['neighborhood'],
+                        "city"  => $orderReturned['city'],
+                        "state"  => $orderReturned['state']
+                    ],
+                    "total" => $orderReturned['total'],
+                    "delivery_fee" => $orderReturned['total'],
+                    "products" => json_decode($orderReturned['products']),
+                    "status" => $orderReturned['status'],
+                    "created_at" => $orderReturned['created_at']
+                ];
             }
 
             http_response_code(200);

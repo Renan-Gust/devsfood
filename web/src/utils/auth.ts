@@ -1,5 +1,5 @@
 import { Dispatch, MouseEvent, SetStateAction } from "react";
-import { FormActiveType } from "../types/auth";
+import { FormActiveType } from "../types/user";
 
 type handleChangeFormProps = {
     type: FormActiveType['type'];

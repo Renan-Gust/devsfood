@@ -3,7 +3,9 @@ import { useEffect, useState } from "react"
 import { OrderInProgress } from "../../components/OrderInProgress"
 import { useAuth } from "../../contexts/AuthContext"
 import { api } from "../../services/api"
+
 import { GetCompletedOrdersResponseData } from "../../types/orders/getCompletedOrders"
+import { formatDate } from "../../utils/formatDate"
 
 import { Container, OtherOrders, Order, OrdersArea } from "./styled"
 
@@ -11,8 +13,6 @@ export function Orders(){
     const { user } = useAuth()
 
     const [completedOrders, setCompletedOrders] = useState<GetCompletedOrdersResponseData['data']>([])
-
-    console.log(user)
 
     useEffect(() => {
         async function getCompletedOrders(){
@@ -23,8 +23,6 @@ export function Orders(){
         }
         
         getCompletedOrders()
-
-        // console.log(completedOrders)
     }, [])
 
     return(
@@ -35,49 +33,41 @@ export function Orders(){
                 <h2>Outros pedidos</h2>
 
                 <OrdersArea>
-                    { completedOrders.length > 0 && completedOrders.map((order, index) => {
-                        console.log(order.length)
+                    { completedOrders.map((order, index) => {
+                        console.log(order)
 
-                        let data = []
+                        let status = "Recebido"
 
-                        if(order.length >= 2){
-                            let total = 0
-
-                            order.map((item) => {
-                                total += item.total
-                            })
-
-                            data.push({
-                                total
-                            })
-                        } else {
-                            data.push({
-                                total: order.total
-                            })
+                        if(order.status === "delivered"){
+                            status = "Entregue"
+                        } else if(order.status === "received"){
+                            status = "Recebido"
+                        } else{
+                            status = "Enviado"
                         }
 
-                        data.map((item) => {
-                            console.log(item)
+                        return(
+                            <Order key={index}>
+                            <div className="top">
+                                <p className="date">{ formatDate(order.created_at) }</p>
+                                <p className="status">{ status }</p>
+                            </div>
 
-                            return(
-                                <Order key={index}>
-                                    <div className="top">
-                                        <p className="date">25/02/203</p>
-                                        <p className="status">Entregue</p>
-                                    </div>
+                            <div className="middle">
+                                <div className="address">
+                                    <p>{order.address.neighborhood}</p>
+                                    <p>{order.address.address}, {order.address.number}</p>
+                                    <p>{order.address.city}, {order.address.state}</p>
+                                </div>
 
-                                    <div className="middle">
-                                        <div className="address">
-                                            <p>Minha casa</p>
-                                            <p>Rua santa luzia, 74</p>
-                                            <p>Rio de Janeiro, RJ</p>
-                                        </div>
+                                {/* {order.products.map((product, index) => (
+                                    <p key={index}>{product.name}</p>
+                                ))} */}
 
-                                        <p className="total">R$ {item.total}</p>
-                                    </div>
-                                </Order>
-                            )
-                        })
+                                <p className="total">R$ { order.total }</p>
+                            </div>
+                        </Order>
+                        )
                     }) }
                 </OrdersArea>
             </OtherOrders>

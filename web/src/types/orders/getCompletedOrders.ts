@@ -1,22 +1,15 @@
+import { AddressResponseData } from "../address";
+import { Products } from "./products";
+
 export interface GetCompletedOrdersResponseData {
     status: string;
     message?: string;
     data: {
-        [key: number]: {
-            deliveryFee: number;
-            created_at: Date;
-            name: string;
-            image: string;
-            price: number;
-            status: string;
-            total: number;
-        }[]
-        // deliveryFee: number;
-        // created_at: Date;
-        // name: string;
-        // image: string;
-        // price: number;
-        // status: string;
-        // total: number;
+        address: AddressResponseData['data'];
+        total: number;
+        delivery_fee: number;
+        products: Products[];
+        status: string;
+        created_at: Date;
     }[];
 }
