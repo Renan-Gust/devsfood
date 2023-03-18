@@ -1,3 +1,5 @@
+import { Status } from "./status";
+
 export interface OrderRequestData {
     userId: number;
     total: number;
@@ -6,6 +8,6 @@ export interface OrderRequestData {
 }
 
 export interface OrderResponseData {
-    status: string;
+    status: Status['status'];
     message?: string;
 }

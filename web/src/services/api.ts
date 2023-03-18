@@ -1,7 +1,7 @@
 import { AddressRequestData, AddressResponseData } from "../types/address";
 import { Categories } from "../types/categories";
 import { OrderRequestData, OrderResponseData } from "../types/orders/doOrder";
-import { GetCompletedOrdersResponseData } from "../types/orders/getCompletedOrders";
+import { CompletedOrdersResponseData, OrderInProgressResponseData } from "../types/orders/ordersResponseData";
 import { Products } from "../types/products";
 import { ResponseData } from "../types/user";
 import { checkLoginRequestData, signInRequestData, signUpRequestData } from "../types/user/auth";
@@ -23,7 +23,8 @@ interface ApiType {
     addAddressRequest: (data: AddressRequestData) => Promise<AddressResponseData>;
     updateAddressRequest: (data: AddressRequestData) => Promise<AddressResponseData>;
     doOrder: (data: OrderRequestData) => Promise<OrderResponseData>;
-    getCompletedOrders: (userId: number) => Promise<GetCompletedOrdersResponseData>;
+    getCompletedOrders: (userId: number) => Promise<CompletedOrdersResponseData>;
+    getOrderInProgress: (userId: number) => Promise<OrderInProgressResponseData>;
 }
 
 interface FieldsType {
@@ -231,6 +232,17 @@ export const api: ApiType = {
     getCompletedOrders: async(userId: number) => {
         try{
             const response = await fetch(`${baseURL}/orders/user/${userId}`)
+            const json = await response.json()
+    
+            return json
+        } catch (error) {
+            console.log(error)
+        }
+    },
+
+    getOrderInProgress: async(userId: number) => {
+        try{
+            const response = await fetch(`${baseURL}/order/user/${userId}`)
             const json = await response.json()
     
             return json

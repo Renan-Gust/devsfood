@@ -7,7 +7,7 @@ export const Container = styled.div`
     padding: 20px;
 `;
 
-export const OrderStatusArea = styled.div`
+export const OrderStatusArea = styled.div<{ status: number; }>`
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -24,7 +24,7 @@ export const OrderStatusArea = styled.div`
 
     &:before{
         content: "";
-        width: 75%;
+        width: ${props => props.status}%;
         height: 3px;
         position: absolute;
         top: 13px;
@@ -85,7 +85,7 @@ export const Products = styled.div`
         gap: 12px;
 
         img{
-            width: 64px;
+            width: 100px;
             height: auto;
             border-radius: 10px;
         }

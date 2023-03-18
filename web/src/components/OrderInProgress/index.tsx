@@ -1,22 +1,46 @@
 import { OrderStatus, Container, OrderStatusArea, ProductArea, Products, DeliveryAddress, Payment } from "./styled"
 
-export function OrderInProgress(){
+import { OrderData } from "../../types/orders/ordersResponseData"
+import { formatDate } from "../../utils/formatDate"
+
+interface OrderInProgressProps {
+    order: OrderData;
+}
+
+export function OrderInProgress({ order }: OrderInProgressProps){
+    let status = 0
+    let width = 0
+
+    if(order.status === "dispatched"){
+        status = 1
+    } else if(order.status === "delivered"){
+        status = 2
+    }
+
+    if(status === 0){
+        width = 30
+    } else if(status === 1){
+        width = 75
+    } else if(status === 2){
+        width = 100
+    }
+
     return(
         <Container>
-            <OrderStatusArea>
-                <OrderStatus className="orderReceived reached">
+            <OrderStatusArea status={width}>
+                <OrderStatus className={`orderReceived ${status === 0 || status > 0 ? "reached" : ""}`}>
                     <div>
                         <span></span>
                         <p>Pedido Recebido</p>
                     </div>
                 </OrderStatus>
-                <OrderStatus className="orderDispatched reached">
+                <OrderStatus className={`orderDispatched ${status === 1 || status > 1 ? "reached" : ""}`}>
                     <div>
                         <span></span>
                         <p>Pedido Enviado</p>
                     </div>
                 </OrderStatus>
-                <OrderStatus className="orderDelivered">
+                <OrderStatus className={`orderDelivered ${status === 2 && "reached"}`}>
                     <div>
                         <span></span>
                         <p>Pedido Entregue</p>
@@ -26,36 +50,29 @@ export function OrderInProgress(){
 
             <ProductArea>
                 <Products>
-                    <div className="product">
-                        <img src="./assets/food-and-restaurant.png" alt="" />
+                    {order.products.map((product, index) => (
+                        <div className="product" key={index}>
+                            <img src={product.image} alt={product.name} />
 
-                        <div className="info">
-                            <p>Carry pie</p>
-                            <p>R$ 13.65</p>
+                            <div className="info">
+                                <p>{product.name}</p>
+                                <p>R$ {product.price}</p>
+                            </div>
                         </div>
-                    </div>
-
-                    <div className="product">
-                        <img src="./assets/food-and-restaurant.png" alt="" />
-
-                        <div className="info">
-                            <p>Carry pie</p>
-                            <p>R$ 13.65</p>
-                        </div>
-                    </div>
+                    ))}
                 </Products>
 
                 <DeliveryAddress>
                     <div className="orderDate">
                         <p>Data do pedido:</p>
-                        <p>20/01/2023</p>
+                        <p>{formatDate(order.created_at)}</p>
                     </div>
 
                     <div className="address">
                         <p>Endereço de Entrega:</p>
-                        <p>Minha casa</p>
-                        <p>Rua santa luzia, 74</p>
-                        <p>Rio de Janeiro, RJ</p>
+                        <p>{order.address.neighborhood}</p>
+                        <p>{order.address.address}, {order.address.number}</p>
+                        <p>{order.address.city}, {order.address.state}</p>
                     </div>
                 </DeliveryAddress>
 
@@ -67,12 +84,12 @@ export function OrderInProgress(){
 
                     <div className="deliveryFee">
                         <p>Taxa de Entrega</p>
-                        <p>R$ 7.99</p>
+                        <p>R$ {order.delivery_fee}</p>
                     </div>
 
                     <div className="total">
                         <p>Total</p>
-                        <p>R$ 124.31</p>
+                        <p>R$ {order.total}</p>
                     </div>
                 </Payment>
             </ProductArea>

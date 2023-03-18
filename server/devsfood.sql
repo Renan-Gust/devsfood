@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 18-Mar-2023 às 03:06
+-- Tempo de geração: 18-Mar-2023 às 17:00
 -- Versão do servidor: 10.4.27-MariaDB
 -- versão do PHP: 8.2.0
 
@@ -81,7 +81,7 @@ CREATE TABLE `orders` (
   `total` decimal(10,2) NOT NULL,
   `delivery_fee` decimal(10,2) NOT NULL,
   `products` longtext NOT NULL,
-  `status` varchar(40) NOT NULL,
+  `status` enum('received','dispatched','delivered') NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -92,8 +92,8 @@ CREATE TABLE `orders` (
 INSERT INTO `orders` (`id`, `user_id`, `address_id`, `total`, `delivery_fee`, `products`, `status`, `created_at`) VALUES
 (1, 4, 1, '124.31', '7.99', '', 'delivered', '2023-03-18 01:01:18'),
 (2, 4, 1, '30.00', '1.99', '', 'delivered', '2023-03-18 01:01:20'),
-(5, 2, 2, '30.00', '1.99', '[{\"name\":\"Torta de Morango\",\"price\":\"128.12\",\"image\":\"https:\\/\\/api.b7web.com.br\\/devsfood\\/media\\/products\\/tortamorango.jpg\",\"ingredients\":\"Morango, farinha, ovo\"},{\"name\":\"Donut de chocolate\",\"price\":\"1.50\",\"image\":\"https:\\/\\/api.b7web.com.br\\/devsfood\\/media\\/products\\/donutchocolate.jpg\",\"ingredients\":\"Chocolate, frango, sal\"}]', 'delivered', '2023-03-18 01:08:37'),
-(6, 2, 1, '30.00', '1.99', '[{\"name\":\"Torta de Chocolate\",\"price\":\"93.00\",\"image\":\"https:\\/\\/api.b7web.com.br\\/devsfood\\/media\\/products\\/tortachocolate.jpg\",\"ingredients\":\"Chocolate, farinha, ovo\"}]', 'delivered', '2023-03-18 02:05:38');
+(5, 2, 2, '30.00', '1.99', '[{\"name\":\"Torta de Morango\",\"price\":\"128.12\",\"image\":\"https:\\/\\/api.b7web.com.br\\/devsfood\\/media\\/products\\/tortamorango.jpg\",\"ingredients\":\"Morango, farinha, ovo\"},{\"name\":\"Donut de chocolate\",\"price\":\"1.50\",\"image\":\"https:\\/\\/api.b7web.com.br\\/devsfood\\/media\\/products\\/donutchocolate.jpg\",\"ingredients\":\"Chocolate, frango, sal\"}]', 'received', '2023-03-18 16:00:00'),
+(6, 2, 1, '25.00', '4.99', '[{\"name\":\"Torta de Chocolate\",\"price\":\"93.00\",\"image\":\"https:\\/\\/api.b7web.com.br\\/devsfood\\/media\\/products\\/tortachocolate.jpg\",\"ingredients\":\"Chocolate, farinha, ovo\"}]', 'delivered', '2023-03-18 15:45:27');
 
 -- --------------------------------------------------------
 

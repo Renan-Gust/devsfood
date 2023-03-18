@@ -10,6 +10,19 @@ use src\models\Product;
 
 class OrderController extends Controller
 {
+    private $infos = [
+        'addresses.address',
+        'addresses.number',
+        'addresses.neighborhood',
+        'addresses.city',
+        'addresses.state',
+        'orders.total',
+        'orders.delivery_fee',
+        'orders.products',
+        'orders.created_at',
+        'orders.status'
+    ];
+
     public function orderDone()
     {
         $result = [];
@@ -67,6 +80,51 @@ class OrderController extends Controller
         }
     }
 
+    public function getOrderInProgress($userId)
+    {
+        $result = [];
+
+        $order = Order::select()
+            ->where("user_id", $userId)
+            ->where("status", "!=", "delivered")
+            ->orderBy("created_at", "DESC")
+            ->one();
+
+        $lastOrderDelivered = Order::select()
+            ->where("user_id", $userId)
+            ->where("status", "delivered")
+            ->orderBy("id", "DESC")
+            ->limit(1)
+            ->one();
+
+        if ($order) {
+            $data = $this->returnOrders($order);
+
+            http_response_code(200);
+            $result['status'] = "success";
+            $result['data'] = $data;
+
+            echo json_encode($result);
+            exit;
+        } else if ($lastOrderDelivered) {
+            $data = $this->returnOrders($lastOrderDelivered);
+
+            http_response_code(200);
+            $result['status'] = "success";
+            $result['data'] = $data;
+
+            echo json_encode($result);
+            exit;
+        } else {
+            http_response_code(200);
+            $result['status'] = "failed";
+            $result['message'] = "Nenhum pedido a caminho!";
+
+            echo json_encode($result);
+            exit;
+        }
+    }
+
     public function getCompletedOrders($userId)
     {
         $result = [];
@@ -79,39 +137,8 @@ class OrderController extends Controller
         if ($orders) {
             $data = [];
 
-            $infos = [
-                'addresses.address',
-                'addresses.number',
-                'addresses.neighborhood',
-                'addresses.city',
-                'addresses.state',
-                'orders.total',
-                'orders.delivery_fee',
-                'orders.products',
-                'orders.created_at',
-                'orders.status'
-            ];
-
             foreach ($orders as $order) {
-                $orderReturned = Addresse::select($infos)
-                    ->where('orders.id', $order['id'])
-                    ->join('orders', 'addresses.id', '=', 'orders.address_id')
-                    ->one();
-
-                $data[] = [
-                    "address" => [
-                        "address" => $orderReturned['address'],
-                        "number"  => $orderReturned['number'],
-                        "neighborhood"  => $orderReturned['neighborhood'],
-                        "city"  => $orderReturned['city'],
-                        "state"  => $orderReturned['state']
-                    ],
-                    "total" => $orderReturned['total'],
-                    "delivery_fee" => $orderReturned['total'],
-                    "products" => json_decode($orderReturned['products']),
-                    "status" => $orderReturned['status'],
-                    "created_at" => $orderReturned['created_at']
-                ];
+                $data[] = $this->returnOrders($order);
             }
 
             http_response_code(200);
@@ -128,5 +155,30 @@ class OrderController extends Controller
             echo json_encode($result);
             exit;
         }
+    }
+
+    public function returnOrders($order)
+    {
+        $orderReturned = Addresse::select($this->infos)
+            ->where('orders.id', $order['id'])
+            ->join('orders', 'addresses.id', '=', 'orders.address_id')
+            ->one();
+
+        $data = [
+            "address" => [
+                "address" => $orderReturned['address'],
+                "number"  => $orderReturned['number'],
+                "neighborhood"  => $orderReturned['neighborhood'],
+                "city"  => $orderReturned['city'],
+                "state"  => $orderReturned['state']
+            ],
+            "total" => $orderReturned['total'],
+            "delivery_fee" => $orderReturned['delivery_fee'],
+            "products" => json_decode($orderReturned['products']),
+            "status" => $orderReturned['status'],
+            "created_at" => $orderReturned['created_at']
+        ];
+
+        return $data;
     }
 }
