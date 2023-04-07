@@ -21,7 +21,7 @@ type AuthContextType = {
 export const Context = createContext({} as AuthContextType)
 
 export const AuthContextProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
-    const { address, setAddress } = useAddress()
+    const { setAddress } = useAddress()
     const [user, setUser] = useState<AuthContextType['user']>(null)
     const [loading, setLoading] = useState(true)
     const [pathname, setPathname] = useState('')
@@ -37,11 +37,7 @@ export const AuthContextProvider: React.FC<{children: React.ReactNode}> = ({ chi
                     setUser(response.data.user)
                 }
 
-                const addressResponse = await api.getAddressRequest(response.data.user.id)
-    
-                if(addressResponse.status === 'success'){
-                    setAddress(addressResponse.data)
-                }
+                await getAddress(response.data.user.id)
             }
 
             setLoading(false)
@@ -57,6 +53,8 @@ export const AuthContextProvider: React.FC<{children: React.ReactNode}> = ({ chi
         if(response.status === 'success'){
             Cookies.set("auth.token", response.data.token.value, { expires: response.data.token.expiresAt })
             setUser(response.data.user)
+
+            await getAddress(response.data.user.id)
             
             return response
         } else{
@@ -74,10 +72,20 @@ export const AuthContextProvider: React.FC<{children: React.ReactNode}> = ({ chi
         if(response.status === 'success'){
             Cookies.set("auth.token", response.data.token.value, { expires: response.data.token.expiresAt })
             setUser(response.data.user)
+
+            await getAddress(response.data.user.id)
             
             return response
         } else{
             return response
+        }
+    }
+
+    async function getAddress(userId: number) {
+        const addressResponse = await api.getAddressRequest(userId)
+    
+        if(addressResponse.status === 'success'){
+            setAddress(addressResponse.data)
         }
     }
 

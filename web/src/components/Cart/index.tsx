@@ -2,8 +2,12 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAddress } from '../../contexts/AddressContext'
 import { useCart } from '../../contexts/CartContext'
+import { useAuth } from '../../contexts/AuthContext'
+import { OrderRequestData } from '../../types/orders/doOrder'
+import { api } from '../../services/api'
+import { Toast } from '../Toast'
 
-import { Address, AddressArea, CartArea, CartBody, CartHeader, CartIcon, CartText, CouponArea, DeliveryArea, EditAddress, FinishOrderButton, OrderArea, ProductInfoArea, ProductItem, ProductQuantityArea, ProductsArea } from './styled'
+import { Address, AddressArea, CartArea, CartBody, CartHeader, CartIcon, CartText, CouponArea, DeliveryArea, EditAddress, Button, OrderArea, ProductInfoArea, ProductItem, ProductQuantityArea, ProductsArea } from './styled'
 
 import cartImage from '/assets/cart.png'
 import down from '/assets/down.png'
@@ -12,10 +16,16 @@ import minus from '/assets/minus.png'
 import plus from '/assets/plus.png'
 
 export function Cart() {
-    const {state, dispatch} = useCart()
-    const {address} = useAddress()
+    const { state, dispatch } = useCart()
+    const { address } = useAddress()
+    const { isAuthenticated, user } = useAuth()
 
     const [show, setShow] = useState<boolean>(false)
+    const [toastText, setToastText] = useState('')
+
+    const total = state.reduce((total, product) => {
+        return total + (product.price! * product.quantity!)
+    }, 0)
 
     function handleCartClick() {
         setShow(!show)
@@ -31,98 +41,133 @@ export function Cart() {
         })
     }
 
-    const total = state.reduce((total, product) => {
-        return total + (product.price! * product.quantity!)
-    }, 0)
+    async function handleDoOrder(){
+        const products: OrderRequestData['productsId'] = []
+        let order: OrderRequestData | {} = {}
+
+        if(state.length !== 0){
+            state.map((product) => {
+                products.push({
+                    quantity: product.quantity!,
+                    id: product.id!
+                })
+
+                order = {
+                    userId: user?.id!,
+                    total: Number(total.toFixed(2)),
+                    deliveryFee: 8.99,
+                    productsId: products
+                }
+            })
+
+            const response = await api.doOrder(order)
+            if(response.status === 'success'){
+                setToastText("Pedido feito com sucesso")
+            } else {
+                setToastText(response.message ?? 'Ocorreu algum erro ao completar o pedido!')
+                return
+            }
+        } else{
+            setToastText("Carrinho está vazio!")
+        }
+    }
 
     return(
-        <CartArea>
-            <CartHeader onClick={handleCartClick}>
-                <CartIcon src={cartImage} />
-                <CartText>Meu carrinho ({state.length})</CartText>
+        <>
+            <CartArea>
+                <CartHeader onClick={handleCartClick}>
+                    <CartIcon src={cartImage} />
+                    <CartText>Meu carrinho ({state.length})</CartText>
 
-                {show && <CartIcon src={down} />}
-            </CartHeader>
+                    {show && <CartIcon src={down} />}
+                </CartHeader>
 
-            <CartBody show={show}>
-                <ProductsArea>
-                    {state.map((item, index) => (
-                        <ProductItem key={index}>
-                            <img src={item.image} alt={item.name} />
-                            <ProductInfoArea>
-                                <p className="name">{item.name}</p>
-                                <p className="price">R$ {item.price!}</p>
-                            </ProductInfoArea>
+                <CartBody show={show}>
+                    <ProductsArea>
+                        {state.map((item, index) => (
+                            <ProductItem key={index}>
+                                <img src={item.image} alt={item.name} />
+                                <ProductInfoArea>
+                                    <p className="name">{item.name}</p>
+                                    <p className="price">R$ {item.price!}</p>
+                                </ProductInfoArea>
 
-                            <ProductQuantityArea>
-                                <img 
-                                    src={minus} alt="ícone de menos"
-                                    onClick={() => handleQuantityChange(item.id!, 'decreaseQuantity')}
-                                />
-                                <p>{item.quantity}</p>
-                                <img 
-                                    src={plus} alt="ícone de mais" 
-                                    onClick={() => handleQuantityChange(item.id!, 'increaseQuantity')}
-                                />
-                            </ProductQuantityArea>
-                        </ProductItem>
-                    ))}
-                </ProductsArea>
+                                <ProductQuantityArea>
+                                    <img 
+                                        src={minus} alt="ícone de menos"
+                                        onClick={() => handleQuantityChange(item.id!, 'decreaseQuantity')}
+                                    />
+                                    <p>{item.quantity}</p>
+                                    <img 
+                                        src={plus} alt="ícone de mais" 
+                                        onClick={() => handleQuantityChange(item.id!, 'increaseQuantity')}
+                                    />
+                                </ProductQuantityArea>
+                            </ProductItem>
+                        ))}
+                    </ProductsArea>
 
-                <DeliveryArea>
-                    <strong>Entrega</strong>
-                    <AddressArea>
-                        {address ?
-                            <>
-                                <Address>
-                                    <p>{address.address}, {address.number}</p>
-                                    <p>Bairro: {address.neighborhood}</p>
-                                    <p>Cidade: {address.city}</p>
-                                    <p>Estado: {address.state}</p>
-                                </Address>
+                    <DeliveryArea>
+                        <strong>Entrega</strong>
+                        <AddressArea>
+                            {address ?
+                                <>
+                                    <Address>
+                                        <p>{address.address}, {address.number}</p>
+                                        <p>Bairro: {address.neighborhood}</p>
+                                        <p>Cidade: {address.city}</p>
+                                        <p>Estado: {address.state}</p>
+                                    </Address>
 
-                                <EditAddress>
-                                    <Link to="/profile">
-                                        <img src={edit} alt="Ícone de um lápis para editar" />
+                                    <EditAddress>
+                                        <Link to="/profile">
+                                            <img src={edit} alt="Ícone de um lápis para editar" />
+                                        </Link>
+                                    </EditAddress>
+                                </>
+                            :
+                                <EditAddress createAddress={true}>
+                                    <Link to="/profile" className="createAddress">
+                                        Cadastrar um endereço
                                     </Link>
                                 </EditAddress>
-                            </>
-                        :
-                            <EditAddress createAddress={true}>
-                                <Link to="/profile" className="createAddress">
-                                    Cadastrar um endereço
-                                </Link>
-                            </EditAddress>
-                        }
-                    </AddressArea>
-                </DeliveryArea>
+                            }
+                        </AddressArea>
+                    </DeliveryArea>
 
-                <CouponArea>
-                    <strong>Cupom de desconto</strong>
-                    <input type="text" />
-                </CouponArea>
+                    <CouponArea>
+                        <strong>Cupom de desconto</strong>
+                        <input type="text" />
+                    </CouponArea>
 
-                <OrderArea>
-                    <div className="discount">
-                        <strong>Desconto</strong>
-                        <strong>R$ 0.00</strong>
-                    </div>
-                    
-                    <div className="deliveryFee">
-                        <strong>Taxa de entrega</strong>
-                        <strong>R$ 8.99</strong>
-                    </div>
+                    <OrderArea>
+                        <div className="discount">
+                            <strong>Desconto</strong>
+                            <strong>R$ 0.00</strong>
+                        </div>
+                        
+                        <div className="deliveryFee">
+                            <strong>Taxa de entrega</strong>
+                            <strong>R$ 8.99</strong>
+                        </div>
 
-                    <div className="total">
-                        <strong>Total</strong>
-                        <strong>R$ {total.toFixed(2)}</strong>
-                    </div>
-                </OrderArea>
+                        <div className="total">
+                            <strong>Total</strong>
+                            <strong>R$ {total.toFixed(2)}</strong>
+                        </div>
+                    </OrderArea>
 
-                <FinishOrderButton>
-                    Finalizar Compra
-                </FinishOrderButton>
-            </CartBody>
-        </CartArea>
+                    { !isAuthenticated ?
+                        <Button>
+                            <Link to="/authentication">Fazer login</Link>
+                        </Button>
+                    :
+                        <Button onClick={handleDoOrder} disabled={state.length === 0 ?? true} >Finalizar Compra</Button>
+                    }
+                </CartBody>
+            </CartArea>
+
+            {toastText && <Toast text={toastText} setToastText={setToastText} />}
+        </>
     )
 }

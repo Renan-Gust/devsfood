@@ -61,9 +61,4 @@ class ProductController extends Controller
 
         echo json_encode($result);
     }
-
-    public function sobreP($args)
-    {
-        print_r($args);
-    }
 }

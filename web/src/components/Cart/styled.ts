@@ -157,7 +157,7 @@ export const OrderArea = styled.div`
     }
 `;
 
-export const FinishOrderButton = styled.button`
+export const Button = styled.button<{ disabled?: boolean;}>`
     margin-top: 24px;
     padding: 10px 20px;
 
@@ -169,4 +169,7 @@ export const FinishOrderButton = styled.button`
     font-weight: bold;
     font-size: 1.2rem;
     text-transform: uppercase;
+
+    opacity: ${props => props.disabled ? 0.5 : 1};
+    cursor: ${props => props.disabled ? "not-allowed" : "pointer"};
 `;

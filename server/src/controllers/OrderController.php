@@ -47,14 +47,15 @@ class OrderController extends Controller
         $products = [];
 
         foreach ($productsId as $value) {
-            $product = Product::select()->where("id", $value)->one();
+            $product = Product::select()->where("id", $value['id'])->one();
 
             $products[] = [
                 "id" => $product['id'],
                 "name" => $product['name'],
                 "price" => $product['price'],
                 "image" => $product['image'],
-                "ingredients" => $product['ingredients']
+                "ingredients" => $product['ingredients'],
+                "quantity" => $value['quantity'],
             ];
         }
 
@@ -87,7 +88,8 @@ class OrderController extends Controller
         $order = Order::select()
             ->where("user_id", $userId)
             ->where("status", "!=", "delivered")
-            ->orderBy("created_at", "DESC")
+            ->orderBy("id", "DESC")
+            ->limit(1)
             ->one();
 
         $lastOrderDelivered = Order::select()

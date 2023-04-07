@@ -22,7 +22,7 @@ interface ApiType {
     getAddressRequest: (userId: number) => Promise<AddressResponseData>;
     addAddressRequest: (data: AddressRequestData) => Promise<AddressResponseData>;
     updateAddressRequest: (data: AddressRequestData) => Promise<AddressResponseData>;
-    doOrder: (data: OrderRequestData) => Promise<OrderResponseData>;
+    doOrder: (data: OrderRequestData | {}) => Promise<OrderResponseData>;
     getCompletedOrders: (userId: number) => Promise<CompletedOrdersResponseData>;
     getOrderInProgress: (userId: number) => Promise<OrderInProgressResponseData>;
 }
@@ -211,7 +211,7 @@ export const api: ApiType = {
         }
     },
 
-    doOrder: async(data: OrderRequestData) => {
+    doOrder: async(data: OrderRequestData | {}) => {
         try{
             const response = await fetch(`${baseURL}/order`, {
                 method: "POST",

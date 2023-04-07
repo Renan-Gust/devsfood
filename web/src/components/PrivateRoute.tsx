@@ -6,7 +6,7 @@ interface PrivateRouteProps {
 }
 
 export const PrivateRoute = ({ children }: PrivateRouteProps) => {
-    const {isAuthenticated, setPathname, loading } = useAuth()
+    const { isAuthenticated, setPathname, loading } = useAuth()
     const location = useLocation()
 
     if(loading){
