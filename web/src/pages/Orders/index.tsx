@@ -27,7 +27,6 @@ export function Orders(){
             const response = await api.getOrderInProgress(user?.id!)
             if(response.status === "success"){
                 setOrderInProgress(response.data)
-                console.log(response.data)
             }
         }
         

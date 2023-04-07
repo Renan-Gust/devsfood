@@ -14,6 +14,8 @@ class UserHelper
         $data = User::select()->where('token', $token)->one();
 
         if (count(array($data)) > 0) {
+            // Verificar se a data de expiração do token no db é menor que 7dias, comparando com a data de hoje
+
             return [
                 "user" => [
                     "id" => $data['id'],

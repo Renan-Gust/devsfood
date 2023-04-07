@@ -35,9 +35,10 @@ export const AuthContextProvider: React.FC<{children: React.ReactNode}> = ({ chi
     
                 if(response.status === 'success'){
                     setUser(response.data.user)
+                    await getAddress(response.data.user.id)
+                }else{
+                    Cookies.remove('auth.token')
                 }
-
-                await getAddress(response.data.user.id)
             }
 
             setLoading(false)
@@ -54,12 +55,10 @@ export const AuthContextProvider: React.FC<{children: React.ReactNode}> = ({ chi
             Cookies.set("auth.token", response.data.token.value, { expires: response.data.token.expiresAt })
             setUser(response.data.user)
 
-            await getAddress(response.data.user.id)
-            
-            return response
-        } else{
-            return response
+            await getAddress(response.data.user.id)   
         }
+
+        return response
     }
 
     async function signUp({ name, email, password }: signUpRequestData){
@@ -74,11 +73,9 @@ export const AuthContextProvider: React.FC<{children: React.ReactNode}> = ({ chi
             setUser(response.data.user)
 
             await getAddress(response.data.user.id)
-            
-            return response
-        } else{
-            return response
         }
+
+        return response
     }
 
     async function getAddress(userId: number) {
