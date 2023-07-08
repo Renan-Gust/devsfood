@@ -8,7 +8,7 @@ import { checkLoginRequestData, signInRequestData, signUpRequestData } from "../
 import { changePasswordRequestData, changePasswordResponseData } from "../types/user/changePassword";
 import { updateUserInfoRequestData, updateUserInfoResponseData } from "../types/user/updateUserInfo";
 
-const baseURL = 'http://devsfood.infinityfreeapp.com/public'
+const baseURL = 'https://web-devsfood.000webhostapp.com/public'
 
 interface ApiType {
     getCategories: () => Promise<Categories>;
