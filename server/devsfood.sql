@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 18-Mar-2023 às 17:00
--- Versão do servidor: 10.4.27-MariaDB
--- versão do PHP: 8.2.0
+-- Generation Time: Jul 08, 2023 at 07:09 PM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Banco de dados: `devsfood`
+-- Database: `devsfood`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `addresses`
+-- Table structure for table `addresses`
 --
 
 CREATE TABLE `addresses` (
@@ -39,18 +39,10 @@ CREATE TABLE `addresses` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Extraindo dados da tabela `addresses`
---
-
-INSERT INTO `addresses` (`id`, `user_id`, `address`, `number`, `neighborhood`, `city`, `state`, `created_at`, `updated_at`) VALUES
-(1, 4, 'Rua Santa Luzia', 74, 'Inhaúma', 'Rio de Janeiro', 'RJ', '2023-01-29 18:38:59', '2023-01-29 19:58:45'),
-(2, 2, 'Rua santa', 50, 'Inhaúma', 'Rio de Janeiro', 'RJ', '2023-03-18 01:02:12', '2023-03-18 01:02:12');
-
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `categorys`
+-- Table structure for table `categorys`
 --
 
 CREATE TABLE `categorys` (
@@ -60,7 +52,7 @@ CREATE TABLE `categorys` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Extraindo dados da tabela `categorys`
+-- Dumping data for table `categorys`
 --
 
 INSERT INTO `categorys` (`id`, `name`, `image`) VALUES
@@ -71,7 +63,7 @@ INSERT INTO `categorys` (`id`, `name`, `image`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `orders`
+-- Table structure for table `orders`
 --
 
 CREATE TABLE `orders` (
@@ -85,20 +77,10 @@ CREATE TABLE `orders` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Extraindo dados da tabela `orders`
---
-
-INSERT INTO `orders` (`id`, `user_id`, `address_id`, `total`, `delivery_fee`, `products`, `status`, `created_at`) VALUES
-(1, 4, 1, '124.31', '7.99', '', 'delivered', '2023-03-18 01:01:18'),
-(2, 4, 1, '30.00', '1.99', '', 'delivered', '2023-03-18 01:01:20'),
-(5, 2, 2, '30.00', '1.99', '[{\"name\":\"Torta de Morango\",\"price\":\"128.12\",\"image\":\"https:\\/\\/api.b7web.com.br\\/devsfood\\/media\\/products\\/tortamorango.jpg\",\"ingredients\":\"Morango, farinha, ovo\"},{\"name\":\"Donut de chocolate\",\"price\":\"1.50\",\"image\":\"https:\\/\\/api.b7web.com.br\\/devsfood\\/media\\/products\\/donutchocolate.jpg\",\"ingredients\":\"Chocolate, frango, sal\"}]', 'received', '2023-03-18 16:00:00'),
-(6, 2, 1, '25.00', '4.99', '[{\"name\":\"Torta de Chocolate\",\"price\":\"93.00\",\"image\":\"https:\\/\\/api.b7web.com.br\\/devsfood\\/media\\/products\\/tortachocolate.jpg\",\"ingredients\":\"Chocolate, farinha, ovo\"}]', 'delivered', '2023-03-18 15:45:27');
-
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `productcategorys`
+-- Table structure for table `productcategorys`
 --
 
 CREATE TABLE `productcategorys` (
@@ -108,7 +90,7 @@ CREATE TABLE `productcategorys` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Extraindo dados da tabela `productcategorys`
+-- Dumping data for table `productcategorys`
 --
 
 INSERT INTO `productcategorys` (`id`, `product_id`, `category_id`) VALUES
@@ -120,7 +102,7 @@ INSERT INTO `productcategorys` (`id`, `product_id`, `category_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `products`
+-- Table structure for table `products`
 --
 
 CREATE TABLE `products` (
@@ -132,7 +114,7 @@ CREATE TABLE `products` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Extraindo dados da tabela `products`
+-- Dumping data for table `products`
 --
 
 INSERT INTO `products` (`id`, `image`, `name`, `price`, `ingredients`) VALUES
@@ -144,7 +126,7 @@ INSERT INTO `products` (`id`, `image`, `name`, `price`, `ingredients`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
@@ -159,38 +141,24 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Extraindo dados da tabela `users`
---
-
-INSERT INTO `users` (`id`, `name`, `email`, `password`, `token`, `token_expires_at`, `created_at`, `updated_at`) VALUES
-(1, 'Renan Gustavo', 'renangustavo7429@gmail.com', '$2y$10$CzAelH5fAnfOmomcDNHfZeCuBA1BuPOpNQlEuuJXqmfG1X4vIoeYi', '08d5a87cbad31e2d0f9a454cff05eec6', '2023-01-30', '2022-12-31 03:20:58', '2023-01-23 17:51:41'),
-(2, 'Renan Gustavo', 'renandevfullstack@gmail.com', '$2y$10$Ww6ntFV9QG9/4NXr6OG3XeVxkmWCRqbEai6a6.9pXuHSuluOiPi3i', 'f5ec892fd7fde730dce1f80598c25936', '2023-03-24', '2022-12-30 23:22:59', '2023-03-17 23:54:44'),
-(3, 'Renan Gostozo', 'renandevfullstac2k@gmail.com', '$2y$10$AbaoCTQTSfOam/SBhCPXHuvVklW.1g0bYApWvVk45/ilXStHRsMgu', 'd31972a9ebc55bb142d559f44de77fe3', '2023-01-30', '2023-01-23 20:25:59', '2023-01-23 20:25:59'),
-(4, 'Teste', 'teste@gmail.com', '$2y$10$NLDAnT1IuHG5G4l6ytjDP.0VKSNFMoQR5X1v0tUo6.pGL8eiqZjGy', '02c2091189617c3932d5d10fc9b9880c', '2023-02-01', '2023-01-23 20:26:42', '2023-01-25 14:37:30'),
-(5, 'Renan Gostozo2', 'renandevfullstaddc2k@gmail.com', '$2y$10$U.UqGLJhCrh95zkub7MBmesGGtttFyKqfMp02LpAGPBn.ovTFqZXa', '4361f4d4839441067b08c33fc67f5692', '2023-02-01', '2023-01-25 12:58:48', '2023-01-25 12:58:48'),
-(6, 'Gostozo2', 'renandevfullstaddc2kss@gmail.com', '$2y$10$QC7ogMYPJzNApdAMxDKwTOtyaci5OXn/6QT2SJACz7bRtIvzm2tsa', '40aa3db2d9184013b0dd6c12cfd4d616', '2023-02-01', '2023-01-25 13:04:27', '2023-01-25 13:04:27'),
-(7, 'Gostozo2', 'renandevfullstad22dc2kss@gmail.com', '$2y$10$qEBgzek2488MqFFhdPf0IOg3XUUskeSUIGMypvW448//Sk2MOvKWS', '01c69c734d27a3bfb0d035e833c19276', '2023-02-01', '2023-01-25 13:06:01', '2023-01-25 13:06:01'),
-(8, 'Gostozo2', 'renandevfullstad2222dc2kss@gmail.com', '$2y$10$Huduh/a1vn5.4lULbiArfuXZDeB/reI6RlK2PI3C.racRGYOK6Lc6', '972b634dd69e54e29915c1083203c6d1', '2023-02-01', '2023-01-25 13:08:02', '2023-01-25 13:08:02');
-
---
--- Índices para tabelas despejadas
+-- Indexes for dumped tables
 --
 
 --
--- Índices para tabela `addresses`
+-- Indexes for table `addresses`
 --
 ALTER TABLE `addresses`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
 
 --
--- Índices para tabela `categorys`
+-- Indexes for table `categorys`
 --
 ALTER TABLE `categorys`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices para tabela `orders`
+-- Indexes for table `orders`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`id`),
@@ -198,7 +166,7 @@ ALTER TABLE `orders`
   ADD KEY `orders_ibfk_2` (`address_id`);
 
 --
--- Índices para tabela `productcategorys`
+-- Indexes for table `productcategorys`
 --
 ALTER TABLE `productcategorys`
   ADD PRIMARY KEY (`id`),
@@ -206,76 +174,76 @@ ALTER TABLE `productcategorys`
   ADD KEY `category_id` (`category_id`);
 
 --
--- Índices para tabela `products`
+-- Indexes for table `products`
 --
 ALTER TABLE `products`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices para tabela `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT de tabelas despejadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de tabela `addresses`
+-- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de tabela `categorys`
+-- AUTO_INCREMENT for table `categorys`
 --
 ALTER TABLE `categorys`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT de tabela `orders`
+-- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de tabela `productcategorys`
+-- AUTO_INCREMENT for table `productcategorys`
 --
 ALTER TABLE `productcategorys`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT de tabela `products`
+-- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT de tabela `users`
+-- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- Restrições para despejos de tabelas
+-- Constraints for dumped tables
 --
 
 --
--- Limitadores para a tabela `addresses`
+-- Constraints for table `addresses`
 --
 ALTER TABLE `addresses`
   ADD CONSTRAINT `addresses_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
--- Limitadores para a tabela `orders`
+-- Constraints for table `orders`
 --
 ALTER TABLE `orders`
   ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`id`) ON DELETE CASCADE;
 
 --
--- Limitadores para a tabela `productcategorys`
+-- Constraints for table `productcategorys`
 --
 ALTER TABLE `productcategorys`
   ADD CONSTRAINT `productcategorys_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
