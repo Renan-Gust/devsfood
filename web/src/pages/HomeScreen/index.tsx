@@ -10,7 +10,7 @@ import { api } from "../../services/api"
 import { CategoriesType } from "../../types/categories"
 import { ProductsDataType } from "../../types/products"
 
-import { CategoryArea, CategoryList, Container, ProductArea, ProductList, ProductPaginationArea, ProductPaginationItem } from './styled'
+import { CategoryArea, CategoryList, Container, ProductArea, ProductList, ProductPaginationArea, ProductPaginationItem, HasNoProducts } from './styled'
 
 import { ModalProduct } from "../../components/ModalProduct"
 import foodAndRestaurant from '/assets/food-and-restaurant.png'
@@ -99,7 +99,7 @@ export const HomeScreen = () => {
                 </CategoryArea>
             }
 
-            {products.length > 0 &&
+            {products.length > 0 ?
                 <ProductArea>
                     <ProductList>
                         {products.map((product) => (
@@ -111,6 +111,8 @@ export const HomeScreen = () => {
                         ))}
                     </ProductList>
                 </ProductArea>
+                :
+                <HasNoProducts>Nenhum produto encontrado</HasNoProducts>
             }
 
             {totalPages > 0 &&

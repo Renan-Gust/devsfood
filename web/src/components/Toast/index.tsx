@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useRef } from 'react';
 
-import { Container, Content, Inner, Loading } from './styled';
+import { Container, Content, Inner, Progress } from './styled';
 
 type ToastProps = {
     text: string;
@@ -21,7 +21,7 @@ export function Toast({ text, setToastText }: ToastProps){
                     <p>{text}</p>
                 </Content>
 
-                <Loading />
+                <Progress />
             </Inner>
         </Container>
     )

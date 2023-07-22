@@ -10,19 +10,6 @@ use src\models\Product;
 
 class OrderController extends Controller
 {
-    private $infos = [
-        'addresses.address',
-        'addresses.number',
-        'addresses.neighborhood',
-        'addresses.city',
-        'addresses.state',
-        'orders.total',
-        'orders.delivery_fee',
-        'orders.products',
-        'orders.created_at',
-        'orders.status'
-    ];
-
     public function orderDone()
     {
         $result = [];
@@ -127,13 +114,12 @@ class OrderController extends Controller
         }
     }
 
-    public function getCompletedOrders($userId)
+    public function getOrders($userId)
     {
         $result = [];
 
         $orders = Order::select()
             ->where("user_id", $userId)
-            ->where("status", "delivered")
             ->get();
 
         if ($orders) {
@@ -152,7 +138,7 @@ class OrderController extends Controller
         } else {
             http_response_code(200);
             $result['status'] = "failed";
-            $result['message'] = "Nenhum pedido entregue!";
+            $result['message'] = "Nenhum pedido encontrado!";
 
             echo json_encode($result);
             exit;
@@ -161,7 +147,20 @@ class OrderController extends Controller
 
     public function returnOrders($order)
     {
-        $orderReturned = Addresse::select($this->infos)
+        $infos = [
+            'addresses.address',
+            'addresses.number',
+            'addresses.neighborhood',
+            'addresses.city',
+            'addresses.state',
+            'orders.total',
+            'orders.delivery_fee',
+            'orders.products',
+            'orders.created_at',
+            'orders.status'
+        ];
+
+        $orderReturned = Addresse::select($infos)
             ->where('orders.id', $order['id'])
             ->join('orders', 'addresses.id', '=', 'orders.address_id')
             ->one();

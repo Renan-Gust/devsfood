@@ -1,11 +1,13 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+
 import { useAddress } from '../../contexts/AddressContext'
 import { useCart } from '../../contexts/CartContext'
 import { useAuth } from '../../contexts/AuthContext'
 import { OrderRequestData } from '../../types/orders/doOrder'
 import { api } from '../../services/api'
 import { Toast } from '../Toast'
+import { Loading } from '../Loading'
 
 import { Address, AddressArea, CartArea, CartBody, CartHeader, CartIcon, CartText, CouponArea, DeliveryArea, EditAddress, Button, OrderArea, ProductInfoArea, ProductItem, ProductQuantityArea, ProductsArea } from './styled'
 
@@ -19,8 +21,10 @@ export function Cart() {
     const { state, dispatch } = useCart()
     const { address } = useAddress()
     const { isAuthenticated, user } = useAuth()
+    const navigate = useNavigate()
 
-    const [show, setShow] = useState<boolean>(false)
+    const [show, setShow] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [toastText, setToastText] = useState('')
 
     const total = state.reduce((total, product) => {
@@ -46,6 +50,8 @@ export function Cart() {
         let order: OrderRequestData | {} = {}
 
         if(state.length !== 0){
+            setLoading(true)
+
             state.map((product) => {
                 products.push({
                     quantity: product.quantity!,
@@ -67,6 +73,12 @@ export function Cart() {
                 setToastText(response.message ?? 'Ocorreu algum erro ao completar o pedido!')
                 return
             }
+
+            setLoading(false)
+            setShow(!show)
+            dispatch({ type: "CLEAR_CART" })
+
+            navigate("/orders")
         } else{
             setToastText("Carrinho está vazio!")
         }
@@ -158,11 +170,14 @@ export function Cart() {
                     </OrderArea>
 
                     { !isAuthenticated ?
-                        <Button>
+                        <Button onClick={handleCartClick}>
                             <Link to="/authentication">Fazer login</Link>
                         </Button>
                     :
-                        <Button onClick={handleDoOrder} disabled={state.length === 0 ?? true} >Finalizar Compra</Button>
+                        <Button onClick={handleDoOrder} disabled={state.length === 0 || loading && true}>
+                            {!loading && "Finalizar Compra"}
+                            {loading && <Loading />}
+                        </Button>
                     }
                 </CartBody>
             </CartArea>

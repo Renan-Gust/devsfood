@@ -29,6 +29,13 @@ export const GlobalStyle = createGlobalStyle`
         border: none;
         outline: none;
         cursor: pointer;
+        position: relative;
+
+        &:disabled{
+            height: 46px;
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
     }
 
     a {

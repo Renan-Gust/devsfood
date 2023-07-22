@@ -18,5 +18,5 @@ $router->post('/address', 'AddressController@addAddress');
 $router->put('/address', 'AddressController@updateAddress');
 
 $router->post('/order', 'OrderController@orderDone');
-$router->get('/orders/user/{id}', 'OrderController@getCompletedOrders');
+$router->get('/orders/user/{id}', 'OrderController@getOrders');
 $router->get('/order/user/{id}', 'OrderController@getOrderInProgress');

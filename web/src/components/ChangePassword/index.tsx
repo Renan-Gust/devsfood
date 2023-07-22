@@ -1,7 +1,8 @@
 import { Dispatch, FormEvent, SetStateAction, useState } from "react";
-import { useAuth } from "../../contexts/AuthContext";
 
+import { useAuth } from "../../contexts/AuthContext";
 import { api } from "../../services/api";
+import { Loading } from "../Loading";
 
 import { Container } from "./styled";
 
@@ -15,11 +16,14 @@ export function ChangePassword({ setToastText }: ChangePasswordProps) {
 
     const [password, setPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
+    const [loading, setLoading] = useState(false)
 
     async function handleChangePassword(event: FormEvent){
         event.preventDefault()
 
         if(password && newPassword){
+            setLoading(true)
+
             const response = await api.changePasswordRequest({ id, password, newPassword })
             if(response.status === 'success'){
                 setUser(response.data.user)
@@ -31,6 +35,8 @@ export function ChangePassword({ setToastText }: ChangePasswordProps) {
                 setToastText(response.message ?? 'Ocorreu algum erro!')
                 return
             }
+            
+            setLoading(false)
         } else{
             setToastText("Campos precisam ser preenchidos")
             return
@@ -43,16 +49,19 @@ export function ChangePassword({ setToastText }: ChangePasswordProps) {
 
             <form onSubmit={handleChangePassword}>
                 <div className="inputGroup">
-                    <strong>Senhta atual</strong>
-                    <input type="password" onChange={(e) => setPassword(e.target.value)} />
+                    <strong>Senha atual</strong>
+                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                 </div>
 
                 <div className="inputGroup">
                     <strong>Nova Senha</strong>
-                    <input type="password" onChange={(e) => setNewPassword(e.target.value)} />
+                    <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
                 </div>
 
-                <button type="submit">Alterar</button>
+                <button type="submit" disabled={loading}>
+                    {!loading && 'Alterar'}
+                    {loading && <Loading />}
+                </button>
             </form>
         </Container>
     )

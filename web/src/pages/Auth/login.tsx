@@ -3,10 +3,9 @@ import { Navigate } from 'react-router-dom';
 
 import { Toast } from '../../components/Toast';
 import { useAuth } from '../../contexts/AuthContext';
-import { Register } from './register';
-
 import { FormActiveType } from '../../types/user';
 import { handleChangeForm } from '../../utils/auth';
+import { Loading } from '../../components/Loading';
 
 import { Container, LoginArea, SubmitButton } from './styled';
 
@@ -16,17 +15,22 @@ export function Login(){
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [toastText, setToastText] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const { signIn, signUp, isAuthenticated, pathname } = useAuth()
 
     async function handleSignIn(event: FormEvent){
         event.preventDefault()
+
         if(!email || !password){
             setToastText("Email e senha precisam ser preenchidos")
             return
         }
 
+        setLoading(true)
         const response = await signIn({ email, password })
+        setLoading(false)
+
         if(response.status === 'failed'){
             setToastText(response.message ?? 'Ocorreu algum erro!')
             return
@@ -41,7 +45,10 @@ export function Login(){
             return
         }
 
+        setLoading(true)
         const response = await signUp({ name, email, password })
+        setLoading(false)
+
         if(response.status === 'failed'){
             setToastText(response.message ?? 'Ocorreu algum erro!')
             return
@@ -72,40 +79,47 @@ export function Login(){
                 </header>
 
                 <div className="formArea">
-                    {formActive === 'login' ?
-                        <form onSubmit={handleSignIn}>
-                            <div className="input-group login">
-                                <label htmlFor="email">E-mail</label>
-                                <input 
-                                    type="email" 
-                                    id="email"
-                                    name="email"
-                                    placeholder="Digite seu E-mail..."
-                                    onChange={(e) => setEmail(e.target.value)}
+                    <form onSubmit={ formActive === 'login' ? handleSignIn : handleSignUp}>
+                        {formActive === 'register' &&
+                            <div className="input-group">
+                                <label htmlFor="name">Nome de usuário</label>
+                                <input
+                                    type="text" 
+                                    id="name" 
+                                    name="name"
+                                    placeholder="Digite seu nome..."
+                                    onChange={(e) => setName(e.target.value)}
                                 />
                             </div>
+                        }
+                        <div className="input-group">
+                            <label htmlFor="email">E-mail</label>
+                            <input 
+                                type="email" 
+                                id="email"
+                                name="email"
+                                placeholder="Digite seu E-mail..."
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </div>
 
-                            <div className="input-group login">
-                                <label htmlFor="password">Senha</label>
-                                <input 
-                                    type="password" 
-                                    id="password" 
-                                    name="password"
-                                    placeholder="Digite sua senha..."
-                                    onChange={(e) => setPassword(e.target.value)}
-                                />
-                            </div>
+                        <div className="input-group">
+                            <label htmlFor="password">Senha</label>
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password"
+                                placeholder="Digite sua senha..."
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </div>
 
-                            <SubmitButton type="submit">Entrar</SubmitButton>
-                        </form>
-                        :
-                        <Register 
-                            handleSignUp={handleSignUp}
-                            setName={setName}
-                            setEmail={setEmail}
-                            setPassword={setPassword}
-                        />
-                    }
+                        <SubmitButton type="submit" disabled={loading}>
+                            {formActive === 'login' && !loading && 'Entrar'}
+                            {formActive === 'register' && !loading && 'Cadastrar'}
+                            {loading && <Loading /> }
+                        </SubmitButton>
+                    </form>
                 </div>
             </LoginArea>
 

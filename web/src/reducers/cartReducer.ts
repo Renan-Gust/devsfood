@@ -124,6 +124,17 @@ export function cartReducer(state: ProductsDataType[], action: reducerActionType
 
             return newState
         break;
+
+        case 'CLEAR_CART':
+            const cart = localStorage.getItem("cart")
+            if(cart !== null){
+                localStorage.removeItem("cart")
+            }
+
+            newState = []
+
+            return newState
+        break;
     }
 
     return state

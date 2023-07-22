@@ -28,13 +28,13 @@ export const Content = styled.div`
     }
 `;
 
-export const Loading = styled.div`
+export const Progress = styled.div`
     height: 8px;
     border-radius: 10px;
     background-color: ${props => props.theme.colors.White};
-    animation: loading 3s linear;
+    animation: progress 3s linear;
 
-    @keyframes loading {
+    @keyframes progress {
         0%{
             width: 0%;
         }

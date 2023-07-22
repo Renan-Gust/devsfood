@@ -41,3 +41,10 @@ export const ProductPaginationItem = styled.div<{ active: number; current: numbe
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
     cursor: pointer;
 `;
+
+export const HasNoProducts = styled.p`
+    color: ${props => props.theme.colors.White};
+    margin-top: 20px;
+    font-size: 2rem;
+    text-align: center;
+`;

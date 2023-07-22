@@ -3,8 +3,7 @@ import { useEffect, useState } from "react"
 import { OrderInProgress } from "../../components/OrderInProgress"
 import { useAuth } from "../../contexts/AuthContext"
 import { api } from "../../services/api"
-
-import { CompletedOrdersResponseData, OrderData } from "../../types/orders/ordersResponseData"
+import { OrdersResponseData, OrderData } from "../../types/orders/ordersResponseData"
 import { formatDate } from "../../utils/formatDate"
 
 import { Container, OtherOrders, Order, OrdersArea } from "./styled"
@@ -12,37 +11,41 @@ import { Container, OtherOrders, Order, OrdersArea } from "./styled"
 export function Orders(){
     const { user } = useAuth()
 
-    const [completedOrders, setCompletedOrders] = useState<CompletedOrdersResponseData['data']>([])
-    const [orderInProgress, setOrderInProgress] = useState<OrderData | null>(null)
+    const [orders, setOrders] = useState<OrdersResponseData['data']>([])
+    const [selectedOrder, setSelectedOrder] = useState<OrderData | null>(null)
 
     useEffect(() => {
-        async function getCompletedOrders(){
-            const response = await api.getCompletedOrders(user?.id!)
+        async function getOrders(){
+            const response = await api.getOrders(user?.id!)
             if(response.status === "success"){
-                setCompletedOrders(response.data)
+                setOrders(response.data)
             }
         }
 
         async function getOrderInProgress(){
             const response = await api.getOrderInProgress(user?.id!)
             if(response.status === "success"){
-                setOrderInProgress(response.data)
+                setSelectedOrder(response.data)
             }
         }
         
-        getCompletedOrders()
+        getOrders()
         getOrderInProgress()
     }, [])
 
+    function handleShowOrder(order: OrderData){
+        setSelectedOrder(order)
+    }
+
     return(
         <Container>
-            {orderInProgress !== null && <OrderInProgress order={orderInProgress} />}
+            {selectedOrder !== null && <OrderInProgress order={selectedOrder} />}
 
             <OtherOrders>
                 <h2>Outros pedidos</h2>
 
                 <OrdersArea>
-                    { completedOrders.map((order, index) => {
+                    { orders.map((order, index) => {
                         let status = "Recebido"
 
                         if(order.status === "delivered"){
@@ -54,7 +57,7 @@ export function Orders(){
                         }
 
                         return(
-                            <Order key={index}>
+                            <Order key={index} onClick={() => handleShowOrder(order)}>
                                 <div className="top">
                                     <p className="date">{ formatDate(order.created_at) }</p>
                                     <p className="status">{ status }</p>

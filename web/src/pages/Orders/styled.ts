@@ -25,6 +25,7 @@ export const Order = styled.div`
     border-radius: 10px;
     background-color: ${props => props.theme.colors.White};
     padding: 20px;
+    cursor: pointer;
 
     .top{
         display: flex;

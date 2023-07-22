@@ -2,7 +2,7 @@ import { AddressResponseData } from "../address";
 import { Products } from "./products";
 import { Status } from "./status";
 
-export interface CompletedOrdersResponseData {
+export interface OrdersResponseData {
     status: string;
     message?: string;
     data: OrderData[];

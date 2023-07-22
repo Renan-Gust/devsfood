@@ -1,14 +1,19 @@
 import { AddressRequestData, AddressResponseData } from "../types/address";
 import { Categories } from "../types/categories";
 import { OrderRequestData, OrderResponseData } from "../types/orders/doOrder";
-import { CompletedOrdersResponseData, OrderInProgressResponseData } from "../types/orders/ordersResponseData";
+import { OrdersResponseData, OrderInProgressResponseData } from "../types/orders/ordersResponseData";
 import { Products } from "../types/products";
 import { ResponseData } from "../types/user";
 import { checkLoginRequestData, signInRequestData, signUpRequestData } from "../types/user/auth";
 import { changePasswordRequestData, changePasswordResponseData } from "../types/user/changePassword";
 import { updateUserInfoRequestData, updateUserInfoResponseData } from "../types/user/updateUserInfo";
 
-const baseURL = 'https://web-devsfood.000webhostapp.com/public'
+let baseURL = "";
+if(window.location.hostname === "localhost"){
+    baseURL = 'http://localhost/projetos/devsfood/server/public';
+} else {
+    baseURL = 'https://web-devsfood.000webhostapp.com/public';
+}
 
 interface ApiType {
     getCategories: () => Promise<Categories>;
@@ -22,7 +27,7 @@ interface ApiType {
     addAddressRequest: (data: AddressRequestData) => Promise<AddressResponseData>;
     updateAddressRequest: (data: AddressRequestData) => Promise<AddressResponseData>;
     doOrder: (data: OrderRequestData | {}) => Promise<OrderResponseData>;
-    getCompletedOrders: (userId: number) => Promise<CompletedOrdersResponseData>;
+    getOrders: (userId: number) => Promise<OrdersResponseData>;
     getOrderInProgress: (userId: number) => Promise<OrderInProgressResponseData>;
 }
 
@@ -228,7 +233,7 @@ export const api: ApiType = {
         }
     },
 
-    getCompletedOrders: async(userId: number) => {
+    getOrders: async(userId: number) => {
         try{
             const response = await fetch(`${baseURL}/orders/user/${userId}`)
             const json = await response.json()

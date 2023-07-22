@@ -1,7 +1,9 @@
 import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from "react";
+
 import { useAddress } from "../../contexts/AddressContext";
 import { useAuth } from "../../contexts/AuthContext";
 import { api } from "../../services/api";
+import { Loading } from "../Loading";
 
 import { Container, Group } from "./styled";
 
@@ -18,6 +20,7 @@ export function AddressArea({ setToastText }: ChangePasswordProps) {
     const [neighborhood, setNeighborhood] = useState('')
     const [city, setCity] = useState('')
     const [state, setState] = useState('')
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         setStreet(address?.address ?? '')
@@ -31,6 +34,8 @@ export function AddressArea({ setToastText }: ChangePasswordProps) {
         event.preventDefault()
 
         if(street && number && neighborhood && city && state){
+            setLoading(true)
+
             const data = {
                 userId: user?.id.toString()!,
                 address: street,
@@ -48,6 +53,8 @@ export function AddressArea({ setToastText }: ChangePasswordProps) {
                 setToastText(response.message ?? 'Ocorreu algum erro!')
                 return
             }
+
+            setLoading(false)
         } else{
             setToastText("Todos os campos precisam ser preenchidos!")
             return
@@ -128,8 +135,10 @@ export function AddressArea({ setToastText }: ChangePasswordProps) {
                     </div>
                 </Group>
 
-                <button type="submit">
-                    { address ? "Alterar" : "Adicionar" }
+                <button type="submit" disabled={loading}>
+                    { address && !loading && "Alterar" }
+                    { !address && !loading && "Adicionar" }
+                    {loading && <Loading />}
                 </button>
             </form>
         </Container>
