@@ -46,6 +46,8 @@ export function AddressArea({ setToastText }: ChangePasswordProps) {
             }
 
             const response = await api.addAddressRequest(data)
+            setLoading(false)
+
             if(response.status === 'success'){
                 setAddress(response.data)
                 setToastText("Alteração feita com sucesso")
@@ -53,8 +55,6 @@ export function AddressArea({ setToastText }: ChangePasswordProps) {
                 setToastText(response.message ?? 'Ocorreu algum erro!')
                 return
             }
-
-            setLoading(false)
         } else{
             setToastText("Todos os campos precisam ser preenchidos!")
             return
